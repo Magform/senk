@@ -1,4 +1,8 @@
 #include "Data.h"
+#include <cstdio> //for sprintf
+
+
+#include <Arduino.h>
 
 Data::Data()
     : accelerometerX(-32768), accelerometerY(-32768), accelerometerZ(-32768),
@@ -33,4 +37,12 @@ short Data::getGyroscopeY() const {
 
 short Data::getGyroscopeZ() const {
   return gyroscopeZ;
+}
+
+const char* Data::toString() const {
+  int maxSize = 5 * 6 + 60; // 5 characters for each number, 60 characters
+  char* result = new char[maxSize];
+  snprintf(result, maxSize, "Accelerometer (X, Y, Z): (%d, %d, %d), Gyroscope (X, Y, Z): (%d, %d, %d)",
+          accelerometerX, accelerometerY, accelerometerZ, gyroscopeX, gyroscopeY, gyroscopeZ);
+  return result;
 }

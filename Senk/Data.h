@@ -19,7 +19,7 @@ class Data {
     short getGyroscopeX() const;
     short getGyroscopeY() const;
     short getGyroscopeZ() const;
-
+    const char* toString() const;
 };
 
 #endif Data_H_

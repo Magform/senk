@@ -2,7 +2,6 @@
 #include "Nicla_System.h"
 #include "Arduino_BHY2.h"
 #include <ArduinoBLE.h>
-#include <vector>
 
 #include "Configuration.h"
 #include "Data.h"
@@ -32,6 +31,7 @@ Data dataSet[dataPerSet];
 void setup() {
   if(debug){
     Serial.begin(115200);
+    Serial.println("Starting...");
   }
 
   BHY2.begin();
@@ -86,6 +86,11 @@ void takeDataSet(){
   for(int i = 0; i<dataPerSet; i++){
     BHY2.update();
     dataSet[i] = Data(accel.x(), accel.y(), accel.z(), gyro.x(), gyro.y(), gyro.z());
+    if(debug){
+      const char* toPrint = dataSet[i].toString();
+      Serial.println(toPrint);
+      delete[] toPrint;
+    }
     delay(distanceData);
   }
 }
