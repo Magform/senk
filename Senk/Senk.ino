@@ -5,16 +5,17 @@
 #include <vector>
 
 #include "Configuration.h"
+#include "Data.h"
 
 //Bluetooth Service and characteristics
-BLEService Accelerometer("1101");
-BLEService Gyroscope("1102");
-BLEShortCharacteristic AccX("2101", BLERead | BLENotify);
-BLEShortCharacteristic AccY("2102", BLERead | BLENotify);  
-BLEShortCharacteristic AccZ("2103", BLERead | BLENotify);
-BLEShortCharacteristic GyroX("3101", BLERead | BLENotify);  
-BLEShortCharacteristic GyroY("3102", BLERead | BLENotify);
-BLEShortCharacteristic GyroZ("3103", BLERead | BLENotify);  
+BLEService Accelerometer("2000");
+BLEService Gyroscope("3000");
+BLEShortCharacteristic AccX("2001", BLERead | BLENotify);
+BLEShortCharacteristic AccY("2002", BLERead | BLENotify);  
+BLEShortCharacteristic AccZ("2003", BLERead | BLENotify);
+BLEShortCharacteristic GyroX("3001", BLERead | BLENotify);  
+BLEShortCharacteristic GyroY("3002", BLERead | BLENotify);
+BLEShortCharacteristic GyroZ("3003", BLERead | BLENotify);  
 
 //Sensor to read
 SensorXYZ accel(SENSOR_ID_ACC);
@@ -26,7 +27,7 @@ void sendDataBLE();
 void takeDataSet();
 void sendDataSet_BLE();
 
-short dataSet[dataPerSet][6];
+Data dataSet[dataPerSet];
 
 void setup() {
   if(debug){
@@ -48,6 +49,7 @@ void loop(){
   if (millis() - lastSet >= distanceBetweenSet){
     lastSet = millis();
     takeDataSet();
+
     sendDataSet_BLE();
   }
 
@@ -64,11 +66,11 @@ int initializeBLE(){
   }
 
   BLE.setLocalName("Senk");
-  BLE.setAdvertisedService(Accelerometer);
+  BLE.setAdvertisedService("Accelerometer");
   Accelerometer.addCharacteristic(AccX);
   Accelerometer.addCharacteristic(AccY);
   Accelerometer.addCharacteristic(AccZ);
-  BLE.setAdvertisedService(Gyroscope);
+  BLE.setAdvertisedService("Gyroscope");
   Gyroscope.addCharacteristic(GyroX);
   Gyroscope.addCharacteristic(GyroY);
   Gyroscope.addCharacteristic(GyroZ);
@@ -83,37 +85,20 @@ int initializeBLE(){
 void takeDataSet(){
   for(int i = 0; i<dataPerSet; i++){
     BHY2.update();
-
-    dataSet[i][0]=accel.x();
-    dataSet[i][1]=accel.y();
-    dataSet[i][2]=accel.z();
-    dataSet[i][3]=gyro.x();
-    dataSet[i][4]=gyro.y();
-    dataSet[i][5]=gyro.z();
+    dataSet[i] = Data(accel.x(), accel.y(), accel.z(), gyro.x(), gyro.y(), gyro.z());
     delay(distanceData);
   }
-}
-
-//Send data from accelerometer and gyroscopo on BLE
-void sendDataBLE(){
-  AccX.writeValue(accel.x());
-  AccY.writeValue(accel.y());
-  AccZ.writeValue(accel.z());
-
-  GyroX.writeValue(gyro.x());
-  GyroY.writeValue(gyro.y());
-  GyroZ.writeValue(gyro.z());
 }
 
 //Send data from dataset to BLE
 void sendDataSet_BLE(){
   for(int i = 0; i<dataPerSet; i++){
-    AccX.writeValue(dataSet[i][0]);
-    AccY.writeValue(dataSet[i][1]);
-    AccZ.writeValue(dataSet[i][2]);
-    GyroX.writeValue(dataSet[i][3]);
-    GyroY.writeValue(dataSet[i][4]);
-    GyroZ.writeValue(dataSet[i][5]);
+    AccX.writeValue(dataSet[i].getAccelerometerX());
+    AccY.writeValue(dataSet[i].getAccelerometerY());
+    AccZ.writeValue(dataSet[i].getAccelerometerZ());
+    GyroX.writeValue(dataSet[i].getGyroscopeX());
+    GyroY.writeValue(dataSet[i].getGyroscopeY());
+    GyroZ.writeValue(dataSet[i].getGyroscopeZ());
     delay(1);
   }
 }
