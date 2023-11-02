@@ -8,6 +8,7 @@
 #define distanceData 10 //milliseconds
 
 #define userRoot "fs"
-#define saveFile "save.csv"
+#define save_File_Name "out.csv"
+#define chunkSize 42
 
 #endif //Configuration_H_

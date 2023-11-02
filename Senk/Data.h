@@ -21,8 +21,9 @@ class Data {
     short getGyroscopeX() const;
     short getGyroscopeY() const;
     short getGyroscopeZ() const;
-    const char* toString() const; 
-    String toCSV() const;
+    const char* toString() const;
+    const char* toCSV() const;
+    // String toCSV() const;
 };
 
 #endif Data_H_
