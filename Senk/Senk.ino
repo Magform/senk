@@ -2,13 +2,7 @@
 #include "Nicla_System.h"
 #include "Arduino_BHY2.h"
 #include <ArduinoBLE.h>
-#include <BlockDevice.h>
-#include <Dir.h>
-#include <File.h>
-#include <FileSystem.h>
 #include <LittleFileSystem.h>
-#include <mbed.h>
-#include <FileHandle.h>
 
 
 #include "Configuration.h"
@@ -16,7 +10,6 @@
 #include "DataSaver.h"
 
 //File system
-mbed::BlockDevice* spif;
 mbed::LittleFileSystem fs(userRoot);
 
 //Bluetooth Service and characteristics
@@ -38,7 +31,6 @@ int initializeBLE();
 void sendDataBLE();
 void takeDataSet();
 void sendDataSet_BLE();
-
 
 Data dataSet[dataPerSet];
 DataSaver dataSaver;
@@ -100,24 +92,6 @@ int initializeBLE(){
   BLE.advertise();
   
   return 1;
-}
-
-int initializeFileSystem(){
-  spif = mbed::BlockDevice::get_default_instance();
-  spif->init();
-
-  // Mount the filesystem
-  int err = fs.mount(spif);
-  if (err) {
-    err = fs.reformat(spif);
-    if(debug){
-      Serial.print("Error mounting file system: ");
-      Serial.println(err);
-    }
-    while (true){
-      ;
-    }
-  }
 }
 
 //Take data from accelerometer and gyroscope and add it to the dataset

@@ -9,6 +9,8 @@
 #include "Data.h"
 #include "Configuration.h"
 
+//need this line in the .ino file -> mbed::LittleFileSystem fs(userRoot);
+
 class DataSaver {
   private:
     FILE* saveFile;
