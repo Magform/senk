@@ -36,8 +36,8 @@ Data dataSet[dataPerSet];
 DataSaver dataSaver;
 
 void setup() {
+  Serial.begin(115200);
   if(debug){
-    Serial.begin(115200);
     Serial.print("Initializing ");
   }
 
