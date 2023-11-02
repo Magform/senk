@@ -46,3 +46,22 @@ const char* Data::toString() const {
           accelerometerX, accelerometerY, accelerometerZ, gyroscopeX, gyroscopeY, gyroscopeZ);
   return result;
 }
+
+String Data::toCSV() const {
+  int maxSize = 5 * 6 + 5 + 5 + 2; // 5 characters for each number, 5 commas and 5 spaces
+  String result;
+  result.reserve(maxSize);
+  result += accelerometerX;
+  result += ", ";
+  result += accelerometerY;
+  result += ", ";
+  result += accelerometerZ;
+  result += ", ";
+  result += gyroscopeX;
+  result += ", ";
+  result += gyroscopeY;
+  result += ", ";
+  result += gyroscopeZ;
+  result += "; ";
+  return result;
+}

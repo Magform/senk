@@ -1,6 +1,8 @@
 #ifndef Data_H_
 #define Data_H_
 
+#include <Arduino.h>
+
 class Data {
   private:
     short accelerometerX;
@@ -19,7 +21,8 @@ class Data {
     short getGyroscopeX() const;
     short getGyroscopeY() const;
     short getGyroscopeZ() const;
-    const char* toString() const;
+    const char* toString() const; 
+    String toCSV() const;
 };
 
 #endif Data_H_
