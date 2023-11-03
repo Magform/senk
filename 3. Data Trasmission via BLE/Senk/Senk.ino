@@ -2,9 +2,15 @@
 #include "Nicla_System.h"
 #include "Arduino_BHY2.h"
 #include <ArduinoBLE.h>
+#include <LittleFileSystem.h>
+
 
 #include "Configuration.h"
 #include "Data.h"
+#include "DataSaver.h"
+
+//File system
+mbed::LittleFileSystem fs(userRoot);
 
 //Bluetooth Service and characteristics
 BLEService Accelerometer("2000");
@@ -27,18 +33,24 @@ void takeDataSet();
 void sendDataSet_BLE();
 
 Data dataSet[dataPerSet];
+DataSaver dataSaver;
 
 void setup() {
+  Serial.begin(115200);
   if(debug){
-    Serial.begin(115200);
-    Serial.println("Starting...");
+    Serial.print("Initializing ");
   }
 
+  dataSaver.begin(save_File_Name);
+  initializeBLE();
+  
   BHY2.begin();
   accel.begin();
   gyro.begin();
 
-  initializeBLE();
+  if(debug){
+    Serial.println(" done!");
+  }
 }
 
 void loop(){
@@ -49,8 +61,9 @@ void loop(){
   if (millis() - lastSet >= distanceBetweenSet){
     lastSet = millis();
     takeDataSet();
-
+    dataSaver.saveData(dataSet, dataPerSet);
     sendDataSet_BLE();
+    dataSaver.printData();
   }
 
   delay(1);
