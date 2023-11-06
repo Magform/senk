@@ -12,18 +12,14 @@ The Senk project's primary goal is to harness the capabilities of an Arduino Nic
 
 #### 2. Data Reading without Serial Printing
 
+### Data Acquisition and Storing
+
+#### 1. Data storing to RAM using class
+
+#### 2. Data storing to QSPI Flash
+
 ### Data Transmission via BLE
 
 #### 1. Sending Every Data
 
 #### 2. Sending Grouped Data
-
-#### 3. Sending Optimization Strategies
-
-#### 4. Advertising
-
-### Data Logging and Storage
-
-#### 1. Periodic BLE Communication for Data Storage
-
-### Real-Time Data Visualization
