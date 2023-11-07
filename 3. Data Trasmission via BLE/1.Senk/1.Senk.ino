@@ -1,4 +1,4 @@
- #include <Arduino.h>
+#include <Arduino.h>
 #include "Nicla_System.h"
 #include "Arduino_BHY2.h"
 #include <ArduinoBLE.h>
@@ -29,11 +29,11 @@ void setup() {
     Serial.print("Initializing ");
   }
 
-  initializeBLE();
-
   BHY2.begin();
   accel.begin();
   gyro.begin();
+
+  initializeBLE();
 
   if(debug){
     Serial.println(" done!");
@@ -41,7 +41,6 @@ void setup() {
 }
 
 void loop(){
-  BLEDevice central = BLE.central();
   static auto lastSet = millis();
   BHY2.update();
   
