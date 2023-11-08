@@ -64,7 +64,7 @@ int DataSaver::saveData(Data toSave[], int size){
 }
 
 void DataSaver::fileDelete(){
-  remove(saveFileName);
+  fs.reformat(spif);
 }
 
 void DataSaver::printData(){
