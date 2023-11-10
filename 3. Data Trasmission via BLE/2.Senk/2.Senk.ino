@@ -37,8 +37,8 @@ void loop(){
   BHY2.update();
   
   if (millis() - lastSet >= distanceBetweenSet){
-    lastSet = millis();
     takeDataSet();
+    lastSet = millis();
     BLECon.send(dataSet, dataPerSet);
   }
 

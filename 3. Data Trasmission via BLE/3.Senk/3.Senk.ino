@@ -37,9 +37,9 @@ void loop(){
   BHY2.update();
   
   if (millis() - lastSet >= distanceBetweenSet){
-    lastSet = millis();
     for(int i=0; i<(1+dataPerSet%200); i++){
       takeDataSet();
+      lastSet = millis();
       BLECon.send(dataSet, std::min(200, dataPerSet));
     }
   }

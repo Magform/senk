@@ -35,7 +35,6 @@ void loop(){
   BHY2.update();
   
   if (millis() - lastSet >= distanceBetweenSet){
-    lastSet = millis();
     takeDataSetAndSend();
   }
 
@@ -54,6 +53,7 @@ void takeDataSetAndSend(){
     short gX = gyro.x(); 
     short gY = gyro.y();
     short gZ = gyro.z();
+    lastSet = millis();
     BLECon.send(aX, aY, aZ, gX, gY, gZ);
     if(debugStatus){
       Serial.print("Accelerometer (X, Y, Z): (");

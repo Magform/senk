@@ -47,15 +47,16 @@ void loop(){
   BHY2.update();
   
   if (millis() - lastSet >= distanceBetweenSet){
-    lastSet = millis();
     for(int i=0; i<toRepeat; i++){
       takeDataSet(std::min(50, dataPerSet));
+      lastSet = millis();
       dataSaver.saveData(dataSet, dataPerSet);
     }
   }
 
   if(millis() - lastPrint >= printFile){
     dataSaver.printData();
+    lastPrint = millis();
   }
 
   delay(1);
