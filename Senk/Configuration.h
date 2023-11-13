@@ -21,7 +21,7 @@
 #define DATA_TO_SCAN 1 // total file line to scan and send in evry file scan, if it's more than total remaing data to send it sand all the data, if is near the real total file length is more efficent
 
 
-void debugPrint(const char* toPrint){
+inline void debugPrint(const char* toPrint){
   #if DEBUG_STATUS
     Serial.println(toPrint);
   #endif
