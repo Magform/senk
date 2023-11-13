@@ -3,10 +3,17 @@
 #include "Arduino_BHY2.h"
 #include <LittleFileSystem.h>
 
-#include "Data.h"
+//Configuration
 #include "Configuration.h"
+
+//Util
+#include "Data.h"
+#if DATA_SAVER_STATUS
 #include "DataSaver.h"
-#include "BLEConnection.h"
+#endif
+#if SEND_DATASET || DATA_SENDER
+#include "BLECommunication.h"
+#endif
 
 //File system
 #if DATA_SAVER_STATUS
@@ -22,7 +29,7 @@ SensorXYZ gyro(SENSOR_ID_GYRO);
 void takeDataSet(int);
 
 #if SEND_DATASET || DATA_SENDER
-BLEConnection BLEcon;
+BLECommunication BLEcon;
 #endif
 
 void setup() {

@@ -1,13 +1,13 @@
-#include "BLEConnection.h"
+#include "BLECommunication.h"
 #include <ArduinoBLE.h>
 #include "Configuration.h"
 
-BLEConnection::BLEConnection() : DataSend("1000"),
+BLECommunication::BLECommunication() : DataSend("1000"),
     Accelerometer("1001", BLERead | BLENotify, 3*sizeof(short)), Gyroscope("1002", BLERead | BLENotify, 3*sizeof(short)){
 
     }
 
-int BLEConnection::initialize(){
+int BLECommunication::initialize(){
 
   if(!BLE.begin()) {
     debugPrint("Bluetooth initialization failed");
@@ -24,7 +24,7 @@ int BLEConnection::initialize(){
   return 1;
 }
 
-void BLEConnection::send(short aX, short aY, short aZ, short gX, short gY, short gZ){
+void BLECommunication::send(short aX, short aY, short aZ, short gX, short gY, short gZ){
   if(aX != -32768 & aY != -32768 & aZ != -32768 & gX != -32768 & gY != -32768 & gZ != -32768){
       short accelerometerValues[3] = {gX, gY, gZ};
       short gyroscopeValues[3] = {gX, gY, gZ};
@@ -36,11 +36,11 @@ void BLEConnection::send(short aX, short aY, short aZ, short gX, short gY, short
   }
 }   
 
-void BLEConnection::send(Data toSend){
+void BLECommunication::send(Data toSend){
   send(toSend.getAccelerometerX(), toSend.getAccelerometerY(), toSend.getAccelerometerZ(), toSend.getGyroscopeX(), toSend.getGyroscopeY(), toSend.getGyroscopeZ());
 }
 
-void BLEConnection::send(Data dataSet[], int length){
+void BLECommunication::send(Data dataSet[], int length){
   for(int i=0; i<length; i++){
     send(dataSet[i]);
   }

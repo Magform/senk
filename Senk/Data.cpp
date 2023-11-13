@@ -56,7 +56,7 @@ const char* Data::toString() const {
 const char* Data::toCSV() const {
   int maxSize = 5 * 6 + 5 + 5 + 2; // max 5 characters for each number, 60 characters
   char* result = new char[maxSize];
-  snprintf(result, maxSize, "%d, %d, %d, %d, %d, %d\n",
+  snprintf(result, maxSize, "%d, %d, %d, %d, %d, %d",
           accelerometerX, accelerometerY, accelerometerZ, gyroscopeX, gyroscopeY, gyroscopeZ);
   return result;
 }

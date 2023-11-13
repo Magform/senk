@@ -34,6 +34,7 @@ int DataSaver::saveData(Data toSave) {
   }
   const char* CSVtoSave = toSave.toCSV();
   int result = fprintf(saveFile, CSVtoSave);
+  fprintf(saveFile, "\n");
   if(result < 0){
     debugPrint("Error writing data to the file.");
     fclose(saveFile);
