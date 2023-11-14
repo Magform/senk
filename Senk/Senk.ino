@@ -38,9 +38,9 @@ void setup() {
   debugPrint("Initializing ");
 
   #if DATA_SAVER_STATUS
-    dataSaver.begin(SAVE_FILE_NAME);
+    dataSaver.initialize(SAVE_FILE_NAME);
     #if DELETE_FILE
-    dataSaver.fileDelete();
+    dataSaver.format();
     #endif
   #endif
 

@@ -17,7 +17,7 @@ void DataSaver::initialize(const char* fileName){
   strcpy(tmpSaveFileName, "/");
   strcat(tmpSaveFileName, USER_ROOT);
   strcat(tmpSaveFileName, "/");
-  strcat(tmpSaveFileName, saveFileNameP);
+  strcat(tmpSaveFileName, fileName);
   saveFileName = tmpSaveFileName;
 }
 
