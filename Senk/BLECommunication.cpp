@@ -24,20 +24,22 @@ int BLECommunication::initialize(){
   return 1;
 }
 
-void BLECommunication::send(short aX, short aY, short aZ, short gX, short gY, short gZ){
+int BLECommunication::send(short aX, short aY, short aZ, short gX, short gY, short gZ){
   if(aX != -32768 & aY != -32768 & aZ != -32768 & gX != -32768 & gY != -32768 & gZ != -32768){
       short accelerometerValues[3] = {gX, gY, gZ};
       short gyroscopeValues[3] = {gX, gY, gZ};
       Accelerometer.writeValue(accelerometerValues, sizeof(accelerometerValues));
       Gyroscope.writeValue(gyroscopeValues, sizeof(gyroscopeValues));
       debugPrint("Data sent via BLE");
+      return 0;
   }else{
     debugPrint("Data is invalid");
+    return -1;
   }
 }   
 
-void BLECommunication::send(Data toSend){
-  send(toSend.getAccelerometerX(), toSend.getAccelerometerY(), toSend.getAccelerometerZ(), toSend.getGyroscopeX(), toSend.getGyroscopeY(), toSend.getGyroscopeZ());
+int BLECommunication::send(Data toSend){
+  return send(toSend.getAccelerometerX(), toSend.getAccelerometerY(), toSend.getAccelerometerZ(), toSend.getGyroscopeX(), toSend.getGyroscopeY(), toSend.getGyroscopeZ());
 }
 
 void BLECommunication::send(Data dataSet[], int length){

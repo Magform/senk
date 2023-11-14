@@ -12,9 +12,9 @@ class BLECommunication {
   public:
     BLECommunication();
     int initialize();
-    void send(short aX, short aY, short aZ, short gX, short gY, short gZ);
+    int send(short aX, short aY, short aZ, short gX, short gY, short gZ);
+    int send(Data toSend);
     void send(Data dataSet[], int length);
-    void send(Data toSend);
 };
 
 #endif // BLEConnection_H_
