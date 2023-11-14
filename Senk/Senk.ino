@@ -26,10 +26,12 @@ SensorXYZ accel(SENSOR_ID_ACC);
 SensorXYZ gyro(SENSOR_ID_GYRO);
 
 //util function declaration
-void takeDataSet(int);
+void takeDataSet(int length);
 
 #if SEND_DATASET || DATA_SENDER
-BLECommunication BLEcon;
+
+
+BLECommunication BLEcom;
 #endif
 
 void setup() {
@@ -49,7 +51,7 @@ void setup() {
   gyro.begin();
   
   #if SEND_DATASET || DATA_SENDER
-  BLEcon.initialize();
+  BLEcom.initialize();
   #endif
 
   debugPrint(" done!");
@@ -69,7 +71,7 @@ void loop(){
       dataSaver.saveData(dataSet, std::min(MAX_DATASET_DIMENSION, DATA_PER_SET));
       #endif
       #if SEND_DATASET
-        BLEcon.send(dataSet, std::min(MAX_DATASET_DIMENSION, DATA_PER_SET));
+        BLEcom.send(dataSet, std::min(MAX_DATASET_DIMENSION, DATA_PER_SET));
       #endif
     }
   }
@@ -78,7 +80,7 @@ void loop(){
   if(millis() - lastScan >= SCAN_TIME){;
     for(int i=0; i<(1+DATA_TO_SCAN/MAX_DATASET_DIMENSION); i++){
       Data* dataSet = dataSaver.getData(std::min(MAX_DATASET_DIMENSION, DATA_TO_SCAN));
-      BLEcon.send(dataSet, std::min(MAX_DATASET_DIMENSION, DATA_TO_SCAN));
+      BLEcom.send(dataSet, std::min(MAX_DATASET_DIMENSION, DATA_TO_SCAN));
       lastScan = millis();
       delete[] dataSet;
     }
