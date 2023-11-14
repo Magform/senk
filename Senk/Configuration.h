@@ -1,27 +1,38 @@
 #ifndef Configuration_H_
 #define Configuration_H_
 
-#define DEBUG_STATUS 1 //if defined as 1 is activated, if defined as 0 is of
-
-#define DISTANCE_BETWEEN_SET 999999 //milliseconds to wait between two different dataset, time is taken at the last data of the last dataset
-#define DATA_PER_SET 1 //total numer of data that a dataset have
-#define DATA_DISTANCE 1 //milliseconds of distance between two different data
-#define MAX_DATASET_DIMENSION 150 //Since a dataset is stored in ram a dataset bigger than 150 cannot stay in RAM so to avoid this u can set this to 150 or less and all the dataset will be splitted in dataset of this quantity that is taken really fast, between two of there we send it on BLE if enable or save it to storage if enable
-
-#define DATA_SAVER_STATUS 0 //1 to turn it on 0 to turn it off data saving to local storage
-#define USER_ROOT "fs" //root directory containg the file to save to
-#define DELETE_FILE 1 //delete all the file to have only new data
-#define SAVE_FILE_NAME "out.csv" // Name of the file containgi all the save
-#define CHUNK_SIZE 42 //Dimension of every chunk (used when printing the file), bigger means faster but also more memory expensive
-
-#define SEND_DATASET 0 // if turned on it send every dataset to the bluetooth after taken
-
-//It doesn not send the same data twice, but keep it saved.
-#define DATA_SENDER 0 //Read data from file and send it (Need DATA_SAVER_STATUS enable to work), it send all data only one time
-#define SCAN_TIME 10 //time between two different file scan, if there is new data it will send it
-#define DATA_TO_SCAN 1 // total file line to scan and send in evry file scan, if it's more than total remaing data to send it sand all the data, if is near the real total file length is more efficent
+// Debugging settings
+#define DEBUG_STATUS 1 // Set to 1 to activate debugging, 0 to deactivate
 
 
+
+// Data configuration
+#define DATA_PER_SET 1 // Total numer of data in a dataset
+#define DATA_DISTANCE 1 // Milliseconds of distance between two different data
+#define DISTANCE_BETWEEN_SET 999999 // Milliseconds to wait between two different dataset, The time is measured from the first data of the current dataset to the last data of the previous dataset
+#define MAX_DATASET_DIMENSION 150 // Since a dataset is stored in ram a dataset bigger than 150 cannot stay in RAM so to use bigger dataset we split it in dataset of the dimension chosed here and, based on other configuration, saved to local storage or send it usign BLE
+
+
+
+// Data saving configuration
+#define DATA_SAVER_STATUS 1 // Set to 1 to enable saving data to local storage, 0 to disable
+#define USER_ROOT "fs" // Root directory containing the file to save to
+#define DELETE_FILE 1 // Set to 1 to delete all files and only keep new data
+#define SAVE_FILE_NAME "out.csv" // Name of the file containing all saved data
+#define CHUNK_SIZE 42 // Dimension of every chunk when printing the file, larger values are faster but more memory-expensive
+
+
+
+// Data sending configuration
+#define SEND_DATASET 1 // Set to 1 to send every dataset to Bluetooth after acquisition
+
+#define DATA_SENDER 1 // Read data from file and send it (Requires DATA_SAVER_STATUS to work), sends all data only once
+#define DATA_TO_SCAN 1  // Total lines to scan and send in each file scan, if it's more than the remaining data, it sends all remaining data
+#define SCAN_TIME 10 // Time between two different file scans, if new data is found, it will be sent
+
+
+
+// Debug printing function
 inline void debugPrint(const char* toPrint){
   #if DEBUG_STATUS
     Serial.println(toPrint);
