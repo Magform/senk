@@ -26,7 +26,7 @@ SensorXYZ accel(SENSOR_ID_ACC);
 SensorXYZ gyro(SENSOR_ID_GYRO);
 
 //util function declaration
-void takeDataSet(int length);
+void takeDataSet(Data dataSet[], int length);
 
 #if SEND_DATASET || DATA_SENDER
 
