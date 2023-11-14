@@ -11,34 +11,34 @@ SensorXYZ accel(SENSOR_ID_ACC);
 SensorXYZ gyro(SENSOR_ID_GYRO);
 
 //util function declaration
-void takeDataSet();
-void printDataSet();
+void takeDataSet(Data dataSet[], int length);
+void printDataSet(Data dataSet[], int length);
 
-Data dataSet[dataPerSet];
 
 void setup() {
-  if(debug){
-    Serial.begin(115200);
-    Serial.print("Initializing ");
-  }
+  #if DEBUG_STATUS
+  Serial.begin(115200);
+  #endif
+  debugPrint("Initializing ");
   
   BHY2.begin();
   accel.begin();
   gyro.begin();
 
-  if(debug){
-    Serial.println(" done!");
-  }
+  debugPrint(" done!");
+
 }
 
 void loop(){
   static auto lastSet = millis();
   BHY2.update();
-  
-  if (millis() - lastSet >= distanceBetweenSet){
-    takeDataSet();
+
+  Data dataSet[DATA_PER_SET];
+
+  if (millis() - lastSet >= DISTANCE_BETWEEN_SET){
+    takeDataSet(dataSet, DATA_PER_SET);
     lastSet = millis();
-    printDataSet();
+    printDataSet(dataSet, DATA_PER_SET);
   }
 
   delay(1);
@@ -47,20 +47,18 @@ void loop(){
 //Function definition
 
 //Take data from accelerometer and gyroscope and add it to the dataset
-void takeDataSet(){
-  for(int i = 0; i<dataPerSet; i++){
+void takeDataSet(Data dataSet[], int length){
+  for(int i = 0; i<length; i++){
     BHY2.update();
     dataSet[i] = Data(accel.x(), accel.y(), accel.z(), gyro.x(), gyro.y(), gyro.z());
-    delay(distanceData);
+    delay(DATA_DISTANCE);
   }
 }
 
-void printDataSet(){
-  for(int i = 0; i<dataPerSet; i++){
-    if(debug){
-      const char* toPrint = dataSet[i].toString();
-      Serial.println(toPrint);
-      delete[] toPrint;
-    }
+void printDataSet(Data dataSet[], int length){
+  for(int i = 0; i<length; i++){
+    const char* toPrint = dataSet[i].toString();
+    debugPrint(toPrint);
+    delete[] toPrint;
   }
 }
