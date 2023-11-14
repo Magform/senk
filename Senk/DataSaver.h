@@ -24,7 +24,7 @@ class DataSaver {
     void format();
     int saveData(Data toSave);
     int saveData(Data toSave[], int length);
-    void printFile();   . // File content is too large to be stored in RAM, so it is printed directly to Serial Monitor
+    void printFile();   // File content is too large to be stored in RAM, so it is printed directly to Serial Monitor
     Data* getData(int dataToReturn); 
 };
 
