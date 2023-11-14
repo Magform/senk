@@ -3,17 +3,17 @@
 
 DataSaver::DataSaver(): fs(USER_ROOT){}
 
-void DataSaver::begin(const char* saveFileNameP){
+void DataSaver::initialize(const char* fileName){
   spif = mbed::BlockDevice::get_default_instance();
   spif->init();
 
   int err = fs.mount(spif);
   while (err) {
     err = fs.reformat(spif);
-    debugPrint("Error mounting file system");
+    debugPrint("Error mounting file system, tring to format it");
   }
 
-  char* tmpSaveFileName = new char[strlen(USER_ROOT) + strlen(saveFileNameP) + 3];
+  char* tmpSaveFileName = new char[strlen(USER_ROOT) + strlen(fileName) + 3];
   strcpy(tmpSaveFileName, "/");
   strcat(tmpSaveFileName, USER_ROOT);
   strcat(tmpSaveFileName, "/");
@@ -48,18 +48,18 @@ int DataSaver::saveData(Data toSave) {
   return 0;
 }
 
-int DataSaver::saveData(Data toSave[], int size){
-  for(int i=0; i<size; i++){
+int DataSaver::saveData(Data toSave[], int length){
+  for(int i=0; i<length; i++){
     saveData(toSave[i]);
   }
 }
 
-void DataSaver::fileDelete(){
+void DataSaver::format(){
   fs.reformat(spif);
   debugPrint("Storage formatted");
 }
 
-void DataSaver::printData(){
+void DataSaver::printFile(){
   saveFile = fopen(saveFileName, "r");
   if(saveFile){
     fseek(saveFile, 0, SEEK_END);

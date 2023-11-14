@@ -13,19 +13,19 @@
 
 class DataSaver {
   private:
-    FILE* saveFile;
-    const char* saveFileName = nullptr;
     mbed::BlockDevice* spif;
     mbed::LittleFileSystem fs;
+    FILE* saveFile;
+    const char* saveFileName = nullptr;
   public:
     DataSaver();
-    void begin(const char* saveFileNameP);
     ~DataSaver();
+    void initialize(const char* fileName);
+    void format();
     int saveData(Data toSave);
-    int saveData(Data toSave[], int size);
-    void fileDelete();
+    int saveData(Data toSave[], int length);
+    void printFile();   . // File content is too large to be stored in RAM, so it is printed directly to Serial Monitor
     Data* getData(int dataToReturn); 
-    void printData(); //im not returning it because the data is to big to stay in the RAM so I'm direclty printing it
 };
 
 
