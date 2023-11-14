@@ -19,8 +19,6 @@
 #define USER_ROOT "fs" // Root directory containing the file to save to
 #define DELETE_FILE 1 // Set to 1 to delete all files and only keep new data
 #define SAVE_FILE_NAME "out.csv" // Name of the file containing all saved data
-#define CHUNK_SIZE 42 // Dimension of every chunk when printing the file, larger values are faster but more memory-expensive
-
 
 
 // Data sending configuration

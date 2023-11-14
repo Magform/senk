@@ -67,12 +67,13 @@ void DataSaver::printFile(){
     rewind(saveFile);
 
     // Allocate a buffer to hold a chunk of data
-    char *buffer = (char *)malloc(CHUNK_SIZE);
+    int maxSize = 5 * 6 + 5 + 5 + 2;
+    char *buffer = (char *)malloc(maxSize);
     if(buffer){
       size_t bytes_read;
-      while ((bytes_read = fread(buffer, 1, CHUNK_SIZE, saveFile)) > 0) {
+      while ((bytes_read = fread(buffer, 1, maxSize, saveFile)) > 0) {
         Serial.print(buffer);
-        memset(buffer, 0, CHUNK_SIZE);
+        memset(buffer, 0, maxSize);
       }
       free(buffer);
     }else{
