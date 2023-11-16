@@ -62,8 +62,9 @@ void loop(){
   static auto lastScan = millis();
   BHY2.update();
   
+  Data dataSet[std::min(MAX_DATASET_DIMENSION, std::max(DATA_TO_SCAN, DATA_PER_SET))];
+
   if (millis() - lastSet >= DISTANCE_BETWEEN_SET){
-    Data dataSet[std::min(MAX_DATASET_DIMENSION, DATA_PER_SET)];
     for(int i=0; i<(1+DATA_PER_SET/MAX_DATASET_DIMENSION); i++){
       takeDataSet(dataSet, std::min(MAX_DATASET_DIMENSION, DATA_PER_SET));
       lastSet = millis();
@@ -71,7 +72,7 @@ void loop(){
       dataSaver.saveData(dataSet, std::min(MAX_DATASET_DIMENSION, DATA_PER_SET));
       #endif
       #if SEND_DATASET
-        BLEcom.send(dataSet, std::min(MAX_DATASET_DIMENSION, DATA_PER_SET));
+      BLEcom.send(dataSet, std::min(MAX_DATASET_DIMENSION, DATA_PER_SET));
       #endif
     }
   }
@@ -79,14 +80,13 @@ void loop(){
   #if DATA_SAVER_STATUS && DATA_SENDER
   if(millis() - lastScan >= SCAN_TIME){;
     for(int i=0; i<(1+DATA_TO_SCAN/MAX_DATASET_DIMENSION); i++){
-      Data* dataSet = dataSaver.getData(std::min(MAX_DATASET_DIMENSION, DATA_TO_SCAN));
+      dataSaver.getData(dataSet, std::min(MAX_DATASET_DIMENSION, DATA_TO_SCAN));
       BLEcom.send(dataSet, std::min(MAX_DATASET_DIMENSION, DATA_TO_SCAN));
       lastScan = millis();
-      delete[] dataSet;
     }
   }
   #endif
-
+  
   delay(1);
 }
 
