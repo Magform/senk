@@ -1,6 +1,5 @@
 #include "Data.h"
-#include <cstdio> //for sprintf
-
+#include <cstdio> //for sprintf and sscanf
 
 #include <Arduino.h>
 
@@ -13,7 +12,14 @@ Data::Data()
 Data::Data(short accelX, short accelY, short accelZ, short gyroX, short gyroY, short gyroZ)
     : accelerometerX(accelX), accelerometerY(accelY), accelerometerZ(accelZ),
       gyroscopeX(gyroX), gyroscopeY(gyroY), gyroscopeZ(gyroZ) {
-  }
+}
+
+Data::Data(char* csv) {
+  std::sscanf(csv, "%hd, %hd, %hd, %hd, %hd, %hd",
+    &accelerometerX, &accelerometerY, &accelerometerZ,
+    &gyroscopeX, &gyroscopeY, &gyroscopeZ);
+}
+
 
 short Data::getAccelerometerX() const {
   return accelerometerX;
@@ -48,28 +54,9 @@ const char* Data::toString() const {
 }
 
 const char* Data::toCSV() const {
-  int maxSize = 5 * 6 + 5 + 5 + 2; // 5 characters for each number, 60 characters
+  int maxSize = 5 * 6 + 5 + 5 + 2; // max 5 characters for each number, 60 characters
   char* result = new char[maxSize];
-  snprintf(result, maxSize, "%d, %d, %d, %d, %d, %d\n",
+  snprintf(result, maxSize, "%d, %d, %d, %d, %d, %d",
           accelerometerX, accelerometerY, accelerometerZ, gyroscopeX, gyroscopeY, gyroscopeZ);
   return result;
 }
-
-// String Data::toCSV() const {
-//   int maxSize = 5 * 6 + 5 + 5 + 2; // 5 characters for each number, 5 commas and 5 spaces
-//   String result;
-//   result.reserve(maxSize);
-//   result += accelerometerX;
-//   result += ", ";
-//   result += accelerometerY;
-//   result += ", ";
-//   result += accelerometerZ;
-//   result += ", ";
-//   result += gyroscopeX;
-//   result += ", ";
-//   result += gyroscopeY;
-//   result += ", ";
-//   result += gyroscopeZ;
-//   result += "; ";
-//   return result;
-// }

@@ -1,97 +1,118 @@
 #include "DataSaver.h"
 #include "Configuration.h"
 
-DataSaver::DataSaver(): fs(userRoot){}
+DataSaver::DataSaver(): fs(USER_ROOT){}
 
-void DataSaver::begin(const char* saveFileNameP){
+void DataSaver::initialize(const char* fileName){
   spif = mbed::BlockDevice::get_default_instance();
   spif->init();
 
   int err = fs.mount(spif);
-  if (err) {
+  while (err) {
     err = fs.reformat(spif);
-    if(debug){
-      Serial.print("Error mounting file system: ");
-      Serial.println(err);
-    }
-    while(true){;}
+    debugPrint("Error mounting file system, tring to format it");
   }
 
-  char* tmpSaveFileName = new char[strlen(userRoot) + strlen(saveFileNameP) + 3];
+  char* tmpSaveFileName = new char[strlen(USER_ROOT) + strlen(fileName) + 3];
   strcpy(tmpSaveFileName, "/");
-  strcat(tmpSaveFileName, userRoot);
+  strcat(tmpSaveFileName, USER_ROOT);
   strcat(tmpSaveFileName, "/");
-  strcat(tmpSaveFileName, saveFileNameP);
+  strcat(tmpSaveFileName, fileName);
   saveFileName = tmpSaveFileName;
 }
 
 DataSaver::~DataSaver() {
   delete[] saveFileName;
+  delete[] buffer;
 }
 
+
+
 int DataSaver::saveData(Data toSave) {
-  saveFile = fopen(saveFileName, "a");
-  if(saveFile == NULL){
-    if(debug){
-      Serial.print("Error opening ");
-      Serial.print(saveFileName);
-      Serial.println(" for writing.");
-    }
+  FILE* saveFile = fopen(saveFileName, "a");
+  if (saveFile == NULL) {
+    debugPrint("Error opening the file for writing");
     return -1;
   }
 
   const char* CSVtoSave = toSave.toCSV();
-  int result = fprintf(saveFile, CSVtoSave);
-  if(result < 0){
-    if(debug){
-      Serial.println("Error writing data to the file.");
-    }
+  int len = snprintf(buffer, MAX_LINE_LENGTH, "%s\n", CSVtoSave);
+  if (len >= MAX_LINE_LENGTH) {
+    debugPrint("Data exceeds buffer size");
     fclose(saveFile);
-    free((void*)CSVtoSave);
+    free((void*)CSVtoSave); 
     return -1;
   }
 
-  result = fclose(saveFile);
-  free((void*)CSVtoSave);
+  fwrite(buffer, 1, len, saveFile);
+
+  fclose(saveFile);
+  debugPrint("Data saved to file");
+  free((void*)CSVtoSave); 
   return 0;
 }
 
-
-int DataSaver::saveData(Data toSave[], int size){
-  for(int i=0; i<size; i++){
+int DataSaver::saveData(Data toSave[], int length){
+  for(int i=0; i<length; i++){
     saveData(toSave[i]);
   }
 }
 
-void DataSaver::fileDelete(){
+void DataSaver::format(){
   fs.reformat(spif);
+  debugPrint("Storage formatted");
 }
 
-void DataSaver::printData(){
+void DataSaver::printFile() {
   saveFile = fopen(saveFileName, "r");
-  if(saveFile){
-    fseek(saveFile, 0, SEEK_END);
-    long fileSize = ftell(saveFile);
-    rewind(saveFile);
-
-    // Allocate a buffer to hold a chunk of data
-    char *buffer = (char *)malloc(chunkSize);
-    if(buffer){
-      size_t bytes_read;
-      while ((bytes_read = fread(buffer, 1, chunkSize, saveFile)) > 0) {
-        Serial.print(buffer);
-        memset(buffer, 0, chunkSize);
-      }
-      free(buffer);
-    }else{
-      if(debug){
-        Serial.println("Memory allocation of buffer for data reading failed.");
-      }
+  if (saveFile) {
+    size_t bytesRead;
+    while ((bytesRead = fread(buffer, 1, MAX_LINE_LENGTH-1, saveFile)) > 0) {
+      buffer[bytesRead] = '\0'; // Null-terminate the chunk
+      Serial.print(buffer);
+      memset(buffer, 0, MAX_LINE_LENGTH); // Clear the buffer for the next read
     }
     fclose(saveFile);
-  }else{
-    if(debug){
-      Serial.println("Error opening file for reading.");
-    }
+  } else {
+    debugPrint("File opening for reading failed");
   }
 }
+
+void DataSaver::getData(Data* dataSet, int dataToReturn) {
+  saveFile = fopen(saveFileName, "r");
+  if (saveFile) {
+    fseek(saveFile, 0, SEEK_END);
+    long fileSize = ftell(saveFile);
+    
+    size_t bytesRead;
+    static long preRead = 0;
+
+    for (int i = 0; i < dataToReturn; ++i) {
+      fseek(saveFile, preRead, SEEK_SET);
+      bytesRead = fread(buffer, 1, MAX_LINE_LENGTH - 1, saveFile);
+      if (bytesRead > 0) {
+        buffer[bytesRead] = '\0'; // Null-terminate the buffer
+        char* newlinePosition = std::strchr(buffer, '\n');
+        if (newlinePosition != nullptr) {
+          size_t length = newlinePosition - buffer;
+          preRead += length + 1;
+          char* line = new char[length + 1];
+          std::strncpy(line, buffer, length);
+          line[length] = '\0'; // Null-terminate the substring
+          Serial.println(line);
+          dataSet[i] = Data(line); // Store a pointer to the Data object in dataSet[i]
+          debugPrint("Data ready");
+          delete[] line;
+          memset(buffer, 0, MAX_LINE_LENGTH); // Clear the buffer for the next read
+        } else {
+          debugPrint("No more data: file ended");
+        }
+      }
+    }
+
+    fclose(saveFile);
+  } else {
+    debugPrint("Error opening file for reading.");
+  }
+}
+
