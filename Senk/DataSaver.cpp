@@ -67,7 +67,7 @@ void DataSaver::printFile() {
   saveFile = fopen(saveFileName, "r");
   if (saveFile) {
     size_t bytesRead;
-    while ((bytesRead = fread(buffer, 1, MAX_LINE_LENGTH, saveFile)) > 0) {
+    while ((bytesRead = fread(buffer, 1, MAX_LINE_LENGTH-1, saveFile)) > 0) {
       buffer[bytesRead] = '\0'; // Null-terminate the chunk
       Serial.print(buffer);
       memset(buffer, 0, MAX_LINE_LENGTH); // Clear the buffer for the next read
@@ -103,6 +103,7 @@ void DataSaver::getData(Data* dataSet, int dataToReturn) {
           dataSet[i] = Data(line); // Store a pointer to the Data object in dataSet[i]
           debugPrint("Data ready");
           delete[] line;
+          memset(buffer, 0, MAX_LINE_LENGTH); // Clear the buffer for the next read
         } else {
           debugPrint("No more data: file ended");
         }
