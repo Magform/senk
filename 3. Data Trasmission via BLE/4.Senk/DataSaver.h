@@ -11,21 +11,24 @@
 
 //need this line in the .ino file -> mbed::LittleFileSystem fs(userRoot);
 
+#define MAX_LINE_LENGTH 48 // max line is like: "-00000, -00000, -00000, -00000, -00000, -00000\n\0" so 6*6+5*2+2
+
 class DataSaver {
   private:
-    FILE* saveFile;
-    const char* saveFileName = nullptr;
     mbed::BlockDevice* spif;
     mbed::LittleFileSystem fs;
+    char buffer[MAX_LINE_LENGTH];
+    FILE* saveFile;
+    const char* saveFileName = nullptr;
   public:
     DataSaver();
-    void begin(const char* saveFileNameP);
     ~DataSaver();
+    void initialize(const char* fileName);
+    void format();
     int saveData(Data toSave);
-    int saveData(Data toSave[], int size);
-    void fileDelete();
-    Data* getData(int dataToReturn); 
-    void printData(); //im not returning it because the data is to big to stay in the RAM so I'm direclty printing it
+    int saveData(Data toSave[], int length);
+    void printFile();   // File content is too large to be stored in RAM, so it is printed directly to Serial Monitor
+    void getData(Data* dataSet, int dataToReturn); 
 };
 
 

@@ -4,17 +4,17 @@
 
 #include "Data.h"
 
-class BLEConnection {
+class BLECommunication {
   private:
     BLEService DataSend;
     BLECharacteristic Accelerometer;
     BLECharacteristic Gyroscope;
   public:
-    BLEConnection();
+    BLECommunication();
     int initialize();
-    void send(short aX, short aY, short aZ, short gX, short gY, short gZ);
+    int send(short aX, short aY, short aZ, short gX, short gY, short gZ);
+    int send(Data toSend);
     void send(Data dataSet[], int length);
-    void send(Data toSend);
 };
 
 #endif // BLEConnection_H_
