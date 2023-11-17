@@ -1,62 +1,64 @@
 #include <Arduino.h>
 #include "Nicla_System.h"
 #include "Arduino_BHY2.h"
+#include <LittleFileSystem.h>
 
+//Configuration
 #include "Configuration.h"
-#include "BLEConnection.h"
-#include "Data.h"
+
+//Util
+#include "BLECommunication.h"
 
 //Sensor to read
 SensorXYZ accel(SENSOR_ID_ACC);
 SensorXYZ gyro(SENSOR_ID_GYRO);
 
-void takeDataSetAndSend();
+//util function declaration
+void takeDataSet(Data dataSet[], int length);
 
-BLEConnection BLECon;
-Data dataSet[dataPerSet];
+BLECommunication BLEcom;
 
 void setup() {
   Serial.begin(115200);
-  if(debugStatus){
-    Serial.print("Initializing ");
-  }
+
+  debugPrint("Initializing ");
 
   BHY2.begin();
   accel.begin();
   gyro.begin();
+  
+  BLEcom.initialize();
 
-  BLECon.initialize();
-
-  if(debugStatus){
-    Serial.println(" done!");
-  }
+  debugPrint(" done!");
 }
 
 void loop(){
-  static auto lastSet = millis();
+  static auto lastSet = millis() - DISTANCE_BETWEEN_SET;
+  static auto lastScan = millis();
   BHY2.update();
   
-  if (millis() - lastSet >= distanceBetweenSet){
-    takeDataSet();
-    lastSet = millis();
-    BLECon.send(dataSet, dataPerSet);
-  }
+  Data dataSet[DATA_PER_SET];
 
+  if (millis() - lastSet >= DISTANCE_BETWEEN_SET){
+    takeDataSet(dataSet, DATA_PER_SET);
+    lastSet = millis();
+    BLEcom.send(dataSet, DATA_PER_SET);
+  }
   delay(1);
 }
 
 //Function definition
 
 //Take data from accelerometer and gyroscope and add it to the dataset
-void takeDataSet(){
-  for(int i = 0; i<dataPerSet; i++){
+void takeDataSet(Data dataSet[], int length){
+  for(int i = 0; i<length; i++){
     BHY2.update();
     dataSet[i] = Data(accel.x(), accel.y(), accel.z(), gyro.x(), gyro.y(), gyro.z());
-    if(debugStatus){
+    #if DEBUG_STATUS
       const char* toPrint = dataSet[i].toString();
-      Serial.println(toPrint);
+      debugPrint(toPrint);
       delete[] toPrint;
-    }
-    delay(distanceData);
+    #endif
+    delay(DATA_DISTANCE);
   }
 }
