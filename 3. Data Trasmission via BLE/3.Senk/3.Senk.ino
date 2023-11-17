@@ -1,46 +1,50 @@
 #include <Arduino.h>
 #include "Nicla_System.h"
 #include "Arduino_BHY2.h"
+#include <LittleFileSystem.h>
 
+//Configuration
 #include "Configuration.h"
-#include "BLEConnection.h"
+
+//Util
 #include "Data.h"
+#include "BLECommunication.h"
 
 //Sensor to read
 SensorXYZ accel(SENSOR_ID_ACC);
 SensorXYZ gyro(SENSOR_ID_GYRO);
 
-void takeDataSetAndSend();
+//util function declaration
+void takeDataSet(Data dataSet[], int length);
 
-BLEConnection BLECon;
-Data dataSet[std::min(200, dataPerSet)];
+BLECommunication BLEcom;
 
 void setup() {
   Serial.begin(115200);
-  if(debugStatus){
-    Serial.print("Initializing ");
-  }
+
+  debugPrint("Initializing ");
 
   BHY2.begin();
   accel.begin();
   gyro.begin();
+  
+  BLEcom.initialize();
 
-  BLECon.initialize();
-
-  if(debugStatus){
-    Serial.println(" done!");
-  }
+  debugPrint(" done!");
 }
 
 void loop(){
-  static auto lastSet = millis();
+  static auto lastSet = millis() - DISTANCE_BETWEEN_SET;
+  static auto lastScan = millis();
   BHY2.update();
   
-  if (millis() - lastSet >= distanceBetweenSet){
-    for(int i=0; i<(1+dataPerSet%200); i++){
-      takeDataSet();
+  Data dataSet[std::min(MAX_DATASET_DIMENSION, DATA_PER_SET)];
+
+  if (millis() - lastSet >= DISTANCE_BETWEEN_SET){
+    for(int i=0; i<(1+DATA_PER_SET/MAX_DATASET_DIMENSION); i++){
+      takeDataSet(dataSet, std::min(MAX_DATASET_DIMENSION, DATA_PER_SET));
       lastSet = millis();
-      BLECon.send(dataSet, std::min(200, dataPerSet));
+      BLEcom.send(dataSet, std::min(MAX_DATASET_DIMENSION, DATA_PER_SET));
     }
   }
   delay(1);
@@ -49,15 +53,15 @@ void loop(){
 //Function definition
 
 //Take data from accelerometer and gyroscope and add it to the dataset
-void takeDataSet(){
-  for(int i = 0; i<std::min(200, dataPerSet); i++){
+void takeDataSet(Data dataSet[], int length){
+  for(int i = 0; i<length; i++){
     BHY2.update();
     dataSet[i] = Data(accel.x(), accel.y(), accel.z(), gyro.x(), gyro.y(), gyro.z());
-    if(debugStatus){
+    #if DEBUG_STATUS
       const char* toPrint = dataSet[i].toString();
-      Serial.println(toPrint);
+      debugPrint(toPrint);
       delete[] toPrint;
-    }
-    delay(distanceData);
+    #endif
+    delay(DATA_DISTANCE);
   }
 }

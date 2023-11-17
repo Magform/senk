@@ -1,6 +1,8 @@
 #ifndef Data_H_
 #define Data_H_
 
+#include <Arduino.h>
+
 class Data {
   private:
     short accelerometerX;
@@ -13,6 +15,7 @@ class Data {
   public:
     Data(); //inizialize with all -32768
     Data(short accelX, short accelY, short accelZ, short gyroX, short gyroY, short gyroZ);
+    Data(char* csv);
     short getAccelerometerX() const;
     short getAccelerometerY() const;
     short getAccelerometerZ() const;
