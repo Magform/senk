@@ -42,7 +42,7 @@ To optimize energy consumption, the project strategically utilizes Bluetooth Low
 
 #### System Overview
 
-##### Configuration
+##### High modularaty
 
 The system is designed to provide high modularity without sacrificing performance and energy efficiency. To achieve this, we utilize `#define` directives to configure various settings. When a configuration is turned off, all associated resources that would be utilized if it were activated are excluded and uninitialized.\\
 This approach effectively saves energy and memory that would otherwise be unnecessarily wasted.
