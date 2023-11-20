@@ -26,7 +26,6 @@ void setup() {
 
 void loop(){
   static auto lastSet = millis() - DISTANCE_BETWEEN_SET;
-  BHY2.update();
 
   if (millis() - lastSet >= DISTANCE_BETWEEN_SET){
     takeDataSet();
