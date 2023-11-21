@@ -16,7 +16,7 @@ class BLECommunication {
     int send(short aX, short aY, short aZ, short gX, short gY, short gZ);
     int send(Data toSend);
     void send(const Data dataSet[], int length);
-    void send(const Data dataSet[], int length, rtos::Semaphore *dataAviable, rtos::Semaphore *dataSent);
+    void send(const Data dataSet[], int* length, rtos::Semaphore *dataAviable, rtos::Semaphore *dataSent);
 };
 
 #endif // BLEConnection_H_

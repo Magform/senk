@@ -74,32 +74,51 @@ void loop(){
   Data dataSet[std::min(MAX_DATASET_DIMENSION, std::max(DATA_TO_SCAN, DATA_PER_SET))];
 
   if (millis() - lastSet >= DISTANCE_BETWEEN_SET){
-    for(int i=0; i<(DATA_PER_SET/MAX_DATASET_DIMENSION); i++){
+    int toSend = 0;
+    for(int i=0; i<DATA_PER_SET/MAX_DATASET_DIMENSION; i++){
       takeDataSet(dataSet, std::min(MAX_DATASET_DIMENSION, DATA_PER_SET));
-      lastSet = millis();
       #if SEND_DATASET
       BLEcom.send(dataSet, std::min(MAX_DATASET_DIMENSION, DATA_PER_SET));
       #endif
       #if !SEND_DATASET && SEND_DATASET_THREAD
       dataSentForBLE.acquire();
+      toSend = std::min(MAX_DATASET_DIMENSION, DATA_PER_SET);
       dataAviableForBLE.release();
-      BLEsending.start(mbed::callback([&BLEcom, &dataSet, &dataAviableForBLE, &dataSentForBLE]() {
-        BLEcom.send(dataSet, std::min(MAX_DATASET_DIMENSION, DATA_PER_SET), &dataAviableForBLE, &dataSentForBLE);
+      BLEsending.start(mbed::callback([&BLEcom, &dataSet, &toSend, &dataAviableForBLE, &dataSentForBLE]() {
+        BLEcom.send(dataSet, &toSend, &dataAviableForBLE, &dataSentForBLE);
       }));
       #endif
       #if DATA_SAVER_STATUS
       dataSaver.saveData(dataSet, std::min(MAX_DATASET_DIMENSION, DATA_PER_SET));
       #endif
     }
+    takeDataSet(dataSet, DATA_PER_SET%MAX_DATASET_DIMENSION);
+    lastSet = millis();
+    #if SEND_DATASET
+    BLEcom.send(dataSet, DATA_PER_SET%MAX_DATASET_DIMENSION);
+    #endif
+    #if !SEND_DATASET && SEND_DATASET_THREAD
+    dataSentForBLE.acquire();
+    toSend = DATA_PER_SET%MAX_DATASET_DIMENSION;
+    dataAviableForBLE.release();
+    BLEsending.start(mbed::callback([&BLEcom, &dataSet, &toSend, &dataAviableForBLE, &dataSentForBLE]() {
+      BLEcom.send(dataSet, &toSend, &dataAviableForBLE, &dataSentForBLE);
+    }));
+    #endif
+    #if DATA_SAVER_STATUS
+    dataSaver.saveData(dataSet, DATA_PER_SET%MAX_DATASET_DIMENSION);
+    #endif
   }
 
   #if DATA_SAVER_STATUS && DATA_SENDER
   if(millis() - lastScan >= SCAN_TIME){;
-    for(int i=0; i<(1+DATA_TO_SCAN/MAX_DATASET_DIMENSION); i++){
+    for(int i=0; i<DATA_TO_SCAN/MAX_DATASET_DIMENSION; i++){
       dataSaver.getData(dataSet, std::min(MAX_DATASET_DIMENSION, DATA_TO_SCAN));
       BLEcom.send(dataSet, std::min(MAX_DATASET_DIMENSION, DATA_TO_SCAN));
-      lastScan = millis();
     }
+    dataSaver.getData(dataSet, DATA_PER_SET%MAX_DATASET_DIMENSION);
+    BLEcom.send(dataSet, DATA_PER_SET%MAX_DATASET_DIMENSION);
+    lastScan = millis();
   }
   #endif
   

@@ -46,7 +46,7 @@ short Data::getGyroscopeZ() const {
 }
 
 const char* Data::toString() const {
-  int maxSize = 5 * 6 + 60; // 5 characters for each number, 60 characters
+  int maxSize = 5 * 8 + 60; // 5 characters for each number, 60 characters
   char* result = new char[maxSize];
   snprintf(result, maxSize, "Accelerometer (X, Y, Z): (%d, %d, %d), Gyroscope (X, Y, Z): (%d, %d, %d)",
           accelerometerX, accelerometerY, accelerometerZ, gyroscopeX, gyroscopeY, gyroscopeZ);
@@ -54,7 +54,7 @@ const char* Data::toString() const {
 }
 
 const char* Data::toCSV() const {
-  int maxSize = 5 * 6 + 5 + 5 + 2; // max 5 characters for each number, 60 characters
+  int maxSize = 5 * 8 + 5 + 5 + 2; // max 5 characters for each number, 60 characters
   char* result = new char[maxSize];
   snprintf(result, maxSize, "%d, %d, %d, %d, %d, %d",
           accelerometerX, accelerometerY, accelerometerZ, gyroscopeX, gyroscopeY, gyroscopeZ);
