@@ -1,5 +1,6 @@
 #include "BLECommunication.h"
 #include <ArduinoBLE.h>
+#include <rtos.h>
 #include "Configuration.h"
 
 BLECommunication::BLECommunication() : DataSend(SERVICE_UUID),
@@ -42,10 +43,20 @@ int BLECommunication::send(Data toSend){
   return send(toSend.getAccelerometerX(), toSend.getAccelerometerY(), toSend.getAccelerometerZ(), toSend.getGyroscopeX(), toSend.getGyroscopeY(), toSend.getGyroscopeZ());
 }
 
-void BLECommunication::send(Data dataSet[], int length){
+void BLECommunication::send(const Data dataSet[], int length){
   for(int i=0; i<length; i++){
     send(dataSet[i]);
   }
   debugPrint("DataSet sent");
 }
 
+void BLECommunication::send(const Data dataSet[], int length, rtos::Semaphore *dataAviable, rtos::Semaphore *dataSent){
+  while(1){
+    dataAviable->acquire();
+    for(int i=0; i<length; i++){
+      send(dataSet[i]);
+    }
+    debugPrint("DataSet sent");
+    dataSent->release();
+  }
+}

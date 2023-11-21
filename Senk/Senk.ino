@@ -11,8 +11,13 @@
 #if DATA_SAVER_STATUS
 #include "DataSaver.h"
 #endif
-#if SEND_DATASET || DATA_SENDER
+#if SEND_DATASET || SEND_DATASET_THREAD || DATA_SENDER
 #include "BLECommunication.h"
+#endif
+#if SEND_DATASET_THREAD
+#include <mbed.h>
+#include <rtos.h>
+#include <platform/Callback.h>
 #endif
 
 //File system
@@ -28,10 +33,14 @@ SensorXYZ gyro(SENSOR_ID_GYRO);
 //util function declaration
 void takeDataSet(Data dataSet[], int length);
 
-#if SEND_DATASET || DATA_SENDER
-
-
+#if SEND_DATASET || SEND_DATASET_THREAD || DATA_SENDER
 BLECommunication BLEcom;
+#endif
+
+#if !SEND_DATASET && SEND_DATASET_THREAD
+rtos::Semaphore dataAviableForBLE(0);
+rtos::Semaphore dataSentForBLE(1);
+rtos::Thread BLEsending;
 #endif
 
 void setup() {
@@ -50,7 +59,7 @@ void setup() {
   accel.begin();
   gyro.begin();
   
-  #if SEND_DATASET || DATA_SENDER
+  #if SEND_DATASET || SEND_DATASET_THREAD || DATA_SENDER
   BLEcom.initialize();
   #endif
 
@@ -65,7 +74,7 @@ void loop(){
   Data dataSet[std::min(MAX_DATASET_DIMENSION, std::max(DATA_TO_SCAN, DATA_PER_SET))];
 
   if (millis() - lastSet >= DISTANCE_BETWEEN_SET){
-    for(int i=0; i<(1+DATA_PER_SET/MAX_DATASET_DIMENSION); i++){
+    for(int i=0; i<1+(DATA_PER_SET/MAX_DATASET_DIMENSION); i++){
       takeDataSet(dataSet, std::min(MAX_DATASET_DIMENSION, DATA_PER_SET));
       lastSet = millis();
       #if DATA_SAVER_STATUS
@@ -73,6 +82,13 @@ void loop(){
       #endif
       #if SEND_DATASET
       BLEcom.send(dataSet, std::min(MAX_DATASET_DIMENSION, DATA_PER_SET));
+      #endif
+      #if !SEND_DATASET && SEND_DATASET_THREAD
+      dataSentForBLE.acquire();
+      dataAviableForBLE.release();
+      BLEsending.start(mbed::callback([&BLEcom, &dataSet, &dataAviableForBLE, &dataSentForBLE]() {
+        BLEcom.send(dataSet, std::min(MAX_DATASET_DIMENSION, DATA_PER_SET), &dataAviableForBLE, &dataSentForBLE);
+      }));
       #endif
     }
   }
