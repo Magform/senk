@@ -34,11 +34,11 @@ This dataset approach allows for high-frequency data acquisition without continu
 
 #### BLE Data Acquisition
 
-Data is shared via BLE, specifically through the creation of a `DataSend` service with a UUID specified in the configuration file. Within this service, two characteristics, namely `Accelerometer` and `Gyroscope`, are established. Both characteristics have UUIDs that can be configured through the settings file (for more information, refer to [here]()).
+Data is shared via BLE, specifically through the creation of a `DataSend` service with a UUID specified in the configuration file. Within this service, two characteristics, namely `Accelerometer` and `Gyroscope`, are established. Both characteristics have UUIDs that can be configured through the settings file (for more information, refer to [here](https://senk.nicolasferraresso.dev/#/installation_and_configuration?id=data-transmission-configuration)).
 
 Both characteristics transmit an array of short values representing XYZ data. It is important to note that the data is transmitted in little-endian format.\\
 For example, if our gyroscope sends something like 0xFFFF0F000200, the corresponding axes values are X: -1, Y: 15, Z: 2.\\
-If needed, a conversion script is available [here]() to translate the transmitted data into axis values.\\
+If needed, a conversion script is available [here](https://github.com/Magform/senk/tree/main/util/conversion) to translate the transmitted data into axis values.\\
 
 ### Class overview
 

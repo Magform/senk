@@ -12,6 +12,8 @@ Within the scope of this project, prioritizing resource and energy efficiency em
 
 ## 2. Energy consumption
 
+Work in progress
+
 ## 3 Future plan
 
 ### 3.1 Code refactoring

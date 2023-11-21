@@ -52,7 +52,7 @@ Options:
 ### Data Configuration
 
 Before configuring the data part, it's beneficial to understand how datasets function in Senk. \\
-You can learn more about datasets [here](link-to-your-dataset-explanation).
+You can learn more about datasets [here](https://senk.nicolasferraresso.dev/#/implementation_analysis?id=dataset-management).
 
 - **DATA_PER_SET:**
   - Total number of data in a dataset.
