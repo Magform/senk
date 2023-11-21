@@ -8,7 +8,7 @@
 
 //Util
 #include "Data.h"
-#if DATA_SAVER_STATUS
+#if DATA_SAVER
 #include "DataSaver.h"
 #endif
 #if SEND_DATASET || SEND_DATASET_THREAD || DATA_SENDER
@@ -21,7 +21,7 @@
 #endif
 
 //File system
-#if DATA_SAVER_STATUS
+#if DATA_SAVER
 mbed::LittleFileSystem fs(USER_ROOT);
 DataSaver dataSaver;
 #endif
@@ -48,7 +48,7 @@ void setup() {
 
   debugPrint("Initializing ");
 
-  #if DATA_SAVER_STATUS
+  #if DATA_SAVER
     dataSaver.initialize(SAVE_FILE_NAME);
     #if DELETE_FILE
     dataSaver.format();
@@ -74,12 +74,9 @@ void loop(){
   Data dataSet[std::min(MAX_DATASET_DIMENSION, std::max(DATA_TO_SCAN, DATA_PER_SET))];
 
   if (millis() - lastSet >= DISTANCE_BETWEEN_SET){
-    for(int i=0; i<1+(DATA_PER_SET/MAX_DATASET_DIMENSION); i++){
+    for(int i=0; i<(DATA_PER_SET/MAX_DATASET_DIMENSION); i++){
       takeDataSet(dataSet, std::min(MAX_DATASET_DIMENSION, DATA_PER_SET));
       lastSet = millis();
-      #if DATA_SAVER_STATUS
-      dataSaver.saveData(dataSet, std::min(MAX_DATASET_DIMENSION, DATA_PER_SET));
-      #endif
       #if SEND_DATASET
       BLEcom.send(dataSet, std::min(MAX_DATASET_DIMENSION, DATA_PER_SET));
       #endif
@@ -89,6 +86,9 @@ void loop(){
       BLEsending.start(mbed::callback([&BLEcom, &dataSet, &dataAviableForBLE, &dataSentForBLE]() {
         BLEcom.send(dataSet, std::min(MAX_DATASET_DIMENSION, DATA_PER_SET), &dataAviableForBLE, &dataSentForBLE);
       }));
+      #endif
+      #if DATA_SAVER_STATUS
+      dataSaver.saveData(dataSet, std::min(MAX_DATASET_DIMENSION, DATA_PER_SET));
       #endif
     }
   }

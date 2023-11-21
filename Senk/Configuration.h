@@ -13,7 +13,7 @@
 #define MAX_DATASET_DIMENSION 150 // Since a dataset is stored in ram a dataset bigger than 150 cannot stay in RAM so to use bigger dataset we split it in dataset of the dimension chosed here and, based on other configuration, saved to local storage or send it usign BLE
 
 // Data saving configuration
-#define DATA_SAVER_STATUS 0 // Set to 1 to enable saving data to local storage, 0 to disable
+#define DATA_SAVER 0 // Set to 1 to enable saving data to local storage, 0 to disable
 #define USER_ROOT "fs" // Root directory containing the file to save to
 #define DELETE_FILE 1 // Set to 1 to delete all files and only keep new data
 #define SAVE_FILE_NAME "out.csv" // Name of the file containing all saved data
