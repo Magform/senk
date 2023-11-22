@@ -8,7 +8,7 @@
 
 //Util
 #include "Data.h"
-#if DATA_SAVER
+#if DATA_SAVER || DATA_SAVER_KEEP_OPEN
 #include "DataSaver.h"
 #endif
 #if SEND_DATASET || SEND_DATASET_THREAD || DATA_SENDER
@@ -21,7 +21,7 @@
 #endif
 
 //File system
-#if DATA_SAVER
+#if DATA_SAVER || DATA_SAVER_KEEP_OPEN
 mbed::LittleFileSystem fs(USER_ROOT);
 DataSaver dataSaver;
 #endif
@@ -48,7 +48,7 @@ void setup() {
 
   debugPrint("Initializing ");
 
-  #if DATA_SAVER
+  #if DATA_SAVER || DATA_SAVER_KEEP_OPEN
     dataSaver.initialize(SAVE_FILE_NAME);
     #if DELETE_FILE
     dataSaver.format();
@@ -58,7 +58,7 @@ void setup() {
   BHY2.begin();
   accel.begin();
   gyro.begin();
-  
+  while(accel.x() == 0 || accel.y() == 0 || accel.z() == 0){BHY2.update();} // wait for sensor to start
   #if SEND_DATASET || SEND_DATASET_THREAD || DATA_SENDER
   BLEcom.initialize();
   #endif
@@ -89,7 +89,10 @@ void loop(){
       }));
       #endif
       #if DATA_SAVER
-      dataSaver.saveData(dataSet, std::min(MAX_DATASET_DIMENSION, DATA_PER_SET));
+      dataSaver.saveData(dataSet, std::min(MAX_DATASET_DIMENSION, DATA_PER_SET), DATA_PER_ITERATION);
+      #endif
+      #if DATA_SAVER_KEEP_OPEN && !DATA_SAVER
+      dataSaver.saveDataKeepOpen(dataSet, std::min(MAX_DATASET_DIMENSION, DATA_PER_SET), DATA_PER_ITERATION);
       #endif
     }
     takeDataSet(dataSet, DATA_PER_SET%MAX_DATASET_DIMENSION);
@@ -106,11 +109,14 @@ void loop(){
     }));
     #endif
     #if DATA_SAVER
-    dataSaver.saveData(dataSet, DATA_PER_SET%MAX_DATASET_DIMENSION);
+    dataSaver.saveData(dataSet, DATA_PER_SET%MAX_DATASET_DIMENSION, DATA_PER_ITERATION);
+    #endif
+    #if DATA_SAVER_KEEP_OPEN && !DATA_SAVER
+    dataSaver.saveData(dataSet, DATA_PER_SET%MAX_DATASET_DIMENSION, DATA_PER_ITERATION);
     #endif
   }
-  
-  #if DATA_SAVER && DATA_SENDER
+
+  #if ( DATA_SAVER || DATA_SAVER_KEEP_OPEN ) && DATA_SENDER
   if(millis() - lastScan >= SCAN_TIME){;
     for(int i=0; i<DATA_TO_SCAN/MAX_DATASET_DIMENSION; i++){
       dataSaver.getData(dataSet, std::min(MAX_DATASET_DIMENSION, DATA_TO_SCAN));

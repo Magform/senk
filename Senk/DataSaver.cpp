@@ -1,5 +1,6 @@
 #include "DataSaver.h"
 #include "Configuration.h"
+#include "HeapBlockDevice.h"
 
 DataSaver::DataSaver(): fs(USER_ROOT){}
 
@@ -29,22 +30,15 @@ DataSaver::~DataSaver() {
 
 
 int DataSaver::saveData(Data toSave) {
-  FILE* saveFile = fopen(saveFileName, "a");
+  saveFile = fopen(saveFileName, "a");
   if (saveFile == NULL) {
     debugPrint("Error opening the file for writing");
     return -1;
   }
 
   const char* CSVtoSave = toSave.toCSV();
-  int len = snprintf(buffer, MAX_LINE_LENGTH, "%s\n", CSVtoSave);
-  if (len >= MAX_LINE_LENGTH) {
-    debugPrint("Data exceeds buffer size");
-    fclose(saveFile);
-    free((void*)CSVtoSave); 
-    return -1;
-  }
 
-  fwrite(buffer, 1, len, saveFile);
+  fwrite(buffer, 1, strlen(CSVtoSave), saveFile);
 
   fclose(saveFile);
   debugPrint("Data saved to file");
@@ -52,11 +46,58 @@ int DataSaver::saveData(Data toSave) {
   return 0;
 }
 
-void DataSaver::saveData(Data toSave[], int length){
-  for(int i=0; i<length; i++){
-    saveData(toSave[i]);
+int DataSaver::saveDataKeepOpen(Data toSave[], int length, int dataPerIteration) {
+  saveFile = fopen(saveFileName, "a");
+  if (saveFile == NULL) {
+    debugPrint("Error opening the file for writing");
+    return -1;
   }
+  for (int i = 0; i < length; i += dataPerIteration) {
+    char Tbuffer[MAX_LINE_LENGTH * dataPerIteration];
+    memset(Tbuffer, 0, sizeof(Tbuffer));
+    int linesToWrite = (length - i < dataPerIteration) ? (length - i) : dataPerIteration;
+    
+    for (int j = 0; j < linesToWrite; j++) {
+      const char* CSVtoSave = toSave[i + j].toCSV();
+      strcat(Tbuffer, CSVtoSave);
+      free((void*)CSVtoSave);
+    }
+
+    fwrite(Tbuffer, 1, strlen(Tbuffer), saveFile);
+  }
+
+  fclose(saveFile);
+  debugPrint("DataSet saved to file");
+  return 0;
 }
+
+int DataSaver::saveData(Data toSave[], int length, int dataPerIteration){
+  for (int i = 0; i < length; i += dataPerIteration) {
+    char Tbuffer[MAX_LINE_LENGTH * dataPerIteration];
+    memset(Tbuffer, 0, sizeof(Tbuffer));
+    
+    int linesToWrite = (length - i < dataPerIteration) ? (length - i) : dataPerIteration;
+
+    for (int j = 0; j < linesToWrite; j++) {
+      const char* CSVtoSave = toSave[i + j].toCSV();
+      strcat(Tbuffer, CSVtoSave);
+      free((void*)CSVtoSave);
+    }
+
+    saveFile = fopen(saveFileName, "a");
+    if (saveFile == NULL) {
+      debugPrint("Error opening the file for writing");
+      return -1;
+    }
+    fwrite(Tbuffer, 1, strlen(Tbuffer), saveFile);
+    fclose(saveFile);
+  }
+  
+  debugPrint("DataSet saved to file");
+  return 0;
+}
+
+
 
 void DataSaver::format(){
   fs.reformat(spif);

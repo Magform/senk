@@ -74,8 +74,20 @@ You can learn more about datasets [here](https://senk.nicolasferraresso.dev/#/im
 
 ### Data Saving Configuration
 
-- **DATA_SAVER_STATUS:**
-  - Set to `1` to enable saving data to local storage, `0` to disable.
+- **DATA_SAVER:**
+  - `1` enables the functionality to save data to local storage; `0` disables it.
+  - Manages the opening and closing of the file before and after writing every batch of `DATA_PER_ITERATION` data entries to the file, respectively.
+
+- **DATA_SAVER_KEEP_OPEN:**
+  - `1` enables continuous data saving to local storage without closing the file after each write operation.
+  - Maintains the file open to write all available data from the dataSet.
+  - This mode is incompatible if `DATA_SAVER` is enabled.
+  - Faster than `DATA_SAVER`, but if the device loses power while the file is open, data may be lost or corrupted.
+
+- **DATA_PER_ITERATION:**
+  - Divides the complete dataSet into groups, with a maximum of `DATA_PER_ITERATION` data entries in each group for writing to the file.
+  - Higher values of `DATA_PER_ITERATION` speed up the saving process but consume more RAM.
+  - To prevent exceeding memory constraints, ensure `DATA_PER_ITERATION` doesn't exceed 15 with a `MAX_DATASET_DIMENSION` of 150.
 
 - **USER_ROOT:**
   - Specifies the root directory where the file will be saved. It is essential for this path to begin with "fs" to ensure proper file system navigation and storage functionality.

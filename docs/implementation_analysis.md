@@ -87,7 +87,8 @@ Below is a concise overview of the class:
    - `format()`: Reformats the storage.
 3. **Data Saving and Retrieval:**
    - `saveData(Data toSave)`: Saves a single data entry to the file.
-   - `saveData(Data toSave[], int length)`: Saves an array of data entries to the file.
+   - `saveData(Data toSave[], int length, int dataPerIteration = 1)`: Saves an array of data entries to the file, closing and opening the file for evry writing, it split the data in group of dataPerIteration length(default: 1 line)..
+   - `saveDataKeepOpen(Data toSave[], int length, int dataPerIteration = 1)`: Saves an array of data entries to the file, keeping the file open for all the instance, it split the data in group of dataPerIteration length(default: 1 line).
    - `getData(Data* dataSet, int dataToReturn)`: This function retrieves datasets from a file, populates the provided array `dataSet` with the retrieved data, and ensures that each dataset is retrieved only once. If there is insufficient data available in the file to meet the requested number of datasets (`dataToReturn`), the remaining portion of the `dataSet` array is filled with void-initialized data.
 4. **File Operations:**
    - `printFile()`: Outputs the entire content of the file to the Serial Monitor. The file is directly printed to avoid loading its potentially large size into RAM.
