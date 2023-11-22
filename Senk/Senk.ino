@@ -88,7 +88,7 @@ void loop(){
         BLEcom.send(dataSet, &toSend, &dataAviableForBLE, &dataSentForBLE);
       }));
       #endif
-      #if DATA_SAVER_STATUS
+      #if DATA_SAVER
       dataSaver.saveData(dataSet, std::min(MAX_DATASET_DIMENSION, DATA_PER_SET));
       #endif
     }
@@ -105,12 +105,12 @@ void loop(){
       BLEcom.send(dataSet, &toSend, &dataAviableForBLE, &dataSentForBLE);
     }));
     #endif
-    #if DATA_SAVER_STATUS
+    #if DATA_SAVER
     dataSaver.saveData(dataSet, DATA_PER_SET%MAX_DATASET_DIMENSION);
     #endif
   }
-
-  #if DATA_SAVER_STATUS && DATA_SENDER
+  
+  #if DATA_SAVER && DATA_SENDER
   if(millis() - lastScan >= SCAN_TIME){;
     for(int i=0; i<DATA_TO_SCAN/MAX_DATASET_DIMENSION; i++){
       dataSaver.getData(dataSet, std::min(MAX_DATASET_DIMENSION, DATA_TO_SCAN));
