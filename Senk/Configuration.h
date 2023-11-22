@@ -9,11 +9,11 @@
 // Data configuration
 #define DATA_PER_SET 500 // Total numer of data in a dataset
 #define DATA_DISTANCE 1 // Milliseconds of distance between two different data
-#define DISTANCE_BETWEEN_SET 600000 // Milliseconds to wait between two different dataset, The time is measured from the first data of the current dataset to the last data of the previous dataset
+#define DISTANCE_BETWEEN_SET 1 // Milliseconds to wait between two different dataset, The time is measured from the first data of the current dataset to the last data of the previous dataset
 #define MAX_DATASET_DIMENSION 150 // Since a dataset is stored in ram a dataset bigger than 150 cannot stay in RAM so to use bigger dataset we split it in dataset of the dimension chosed here and, based on other configuration, saved to local storage or send it usign BLE
 
 // Data saving configuration
-#define DATA_SAVER_STATUS 1 // Set to 1 to enable saving data to local storage, 0 to disable
+#define DATA_SAVER 0 // Set to 1 to enable saving data to local storage, 0 to disable
 #define USER_ROOT "fs" // Root directory containing the file to save to
 #define DELETE_FILE 1 // Set to 1 to delete all files and only keep new data
 #define SAVE_FILE_NAME "out.csv" // Name of the file containing all saved data
@@ -21,8 +21,9 @@
 
 // Data sending configuration
 #define SEND_DATASET 0 // Set to 1 to send every dataset to Bluetooth after acquisition
+#define SEND_DATASET_THREAD 1 // Set to 1 to use another thread to send every dataset to Bluetooth after acquisition, does not work if SEND_DATASET is enable
 
-#define DATA_SENDER 1 // Read data from file and send it (Requires DATA_SAVER_STATUS to work), sends all data only once
+#define DATA_SENDER 0 // Read data from file and send it (Requires DATA_SAVER_STATUS to work), sends all data only once
 #define DATA_TO_SCAN 500  // Total lines to scan and send in each file scan, if it's more than the remaining data, it sends all remaining data
 #define SCAN_TIME 600000 // Time between two different file scans, if new data is found, it will be sent
 
@@ -32,9 +33,14 @@
 
 
 // Debug printing function
+
+#include <rtos.h>
 inline void debugPrint(const char* toPrint){
   #if DEBUG_STATUS
+    static rtos::Semaphore serialSem(1);
+    serialSem.acquire();
     Serial.println(toPrint);
+    serialSem.release();
   #endif
 }
 

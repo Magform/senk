@@ -91,6 +91,11 @@ You can learn more about datasets [here](https://senk.nicolasferraresso.dev/#/im
 - **SEND_DATASET:**
   - Set to `1` to send every dataset to Bluetooth after acquisition.
 
+- **SEND_DATASET_THREAD:**
+  - Set to 1, initiates a dedicated thread for transmitting every dataset to Bluetooth after acquisition.
+  - Not functional if SEND_DATASET is enabled.
+  - Although slightly more energy-consuming than SEND_DATASET, it significantly reduces the delay between two distinct dataset parts when the dataset size exceeds `MAX_DATASET_DIMENSION`.
+
 - **DATA_SENDER:**
   - This option enables reading data from the file and sending it through Bluetooth. It functions only when `DATA_SAVER_STATUS` is enabled. The program scans and sends all available data once during its execution.
 

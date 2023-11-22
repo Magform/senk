@@ -52,7 +52,7 @@ int DataSaver::saveData(Data toSave) {
   return 0;
 }
 
-int DataSaver::saveData(Data toSave[], int length){
+void DataSaver::saveData(Data toSave[], int length){
   for(int i=0; i<length; i++){
     saveData(toSave[i]);
   }

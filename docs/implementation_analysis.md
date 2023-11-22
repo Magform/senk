@@ -104,3 +104,5 @@ The `BLECommunication` class serves as the central manager for Bluetooth Low Ene
     - `send(short aX, short aY, short aZ, short gX, short gY, short gZ)`: Sends a single set of accelerometer and gyroscope data via BLE. This function validates and transmits the provided data.
     - `send(Data toSend)`: Sends a single data entry using BLE. This method takes a `Data` object containing accelerometer and gyroscope values and transmits it.
     - `send(Data toSend[], int length)`: Sends an array of data entries using BLE. This method facilitates the transmission of multiple `Data` entries in succession.
+    - `send(const Data dataSet[], int length, rtos::Semaphore *dataAviable, rtos::Semaphore *dataSent)`:  This method continuously waits for the `dataAvailable` semaphore to be acquired, then proceeds to send the provided array of `Data` entries via BLE. After sending all entries,releases the `dataSent` semaphore to signal that data has been sent.
+  
