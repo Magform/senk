@@ -41,6 +41,7 @@ BLECommunication BLEcom;
 rtos::Semaphore dataAviableForBLE(0);
 rtos::Semaphore dataSentForBLE(1);
 rtos::Thread BLEsending;
+int toSend = 0;
 #endif
 
 void setup() {
@@ -74,56 +75,45 @@ void loop(){
   Data dataSet[std::min(MAX_DATASET_DIMENSION, std::max(DATA_TO_SCAN, DATA_PER_SET))];
 
   if (millis() - lastSet >= DISTANCE_BETWEEN_SET){
-    int toSend = 0;
-    for(int i=0; i<DATA_PER_SET/MAX_DATASET_DIMENSION; i++){
-      takeDataSet(dataSet, std::min(MAX_DATASET_DIMENSION, DATA_PER_SET));
+    int totalIteration = DATA_PER_SET/MAX_DATASET_DIMENSION;
+    for(int i=0; i<=totalIteration; i++){
+      
+      int dataSize = (i == totalIterations) ? DATA_PER_SET%MAX_DATASET_DIMENSION : MAX_DATASET_DIMENSION;
+
+      takeDataSet(dataSet, dataSize);
+      lastSet = millis();
+      
       #if SEND_DATASET
-      BLEcom.send(dataSet, std::min(MAX_DATASET_DIMENSION, DATA_PER_SET));
+      BLEcom.send(dataSet, dataSize);
       #endif
+      
       #if !SEND_DATASET && SEND_DATASET_THREAD
       dataSentForBLE.acquire();
-      toSend = std::min(MAX_DATASET_DIMENSION, DATA_PER_SET);
+      toSend = dataSize;
       dataAviableForBLE.release();
       BLEsending.start(mbed::callback([&BLEcom, &dataSet, &toSend, &dataAviableForBLE, &dataSentForBLE]() {
         BLEcom.send(dataSet, &toSend, &dataAviableForBLE, &dataSentForBLE);
       }));
       #endif
+
       #if DATA_SAVER
-      dataSaver.saveData(dataSet, std::min(MAX_DATASET_DIMENSION, DATA_PER_SET), DATA_PER_ITERATION);
+      dataSaver.saveData(dataSet, dataSize);
       #endif
+      
       #if DATA_SAVER_KEEP_OPEN && !DATA_SAVER
-      dataSaver.saveDataKeepOpen(dataSet, std::min(MAX_DATASET_DIMENSION, DATA_PER_SET), DATA_PER_ITERATION);
+      dataSaver.saveDataKeepOpen(dataSet, dataSize, DATA_PER_ITERATION);
       #endif
     }
-    takeDataSet(dataSet, DATA_PER_SET%MAX_DATASET_DIMENSION);
-    lastSet = millis();
-    #if SEND_DATASET
-    BLEcom.send(dataSet, DATA_PER_SET%MAX_DATASET_DIMENSION);
-    #endif
-    #if !SEND_DATASET && SEND_DATASET_THREAD
-    dataSentForBLE.acquire();
-    toSend = DATA_PER_SET%MAX_DATASET_DIMENSION;
-    dataAviableForBLE.release();
-    BLEsending.start(mbed::callback([&BLEcom, &dataSet, &toSend, &dataAviableForBLE, &dataSentForBLE]() {
-      BLEcom.send(dataSet, &toSend, &dataAviableForBLE, &dataSentForBLE);
-    }));
-    #endif
-    #if DATA_SAVER
-    dataSaver.saveData(dataSet, DATA_PER_SET%MAX_DATASET_DIMENSION, DATA_PER_ITERATION);
-    #endif
-    #if DATA_SAVER_KEEP_OPEN && !DATA_SAVER
-    dataSaver.saveData(dataSet, DATA_PER_SET%MAX_DATASET_DIMENSION, DATA_PER_ITERATION);
-    #endif
   }
 
   #if ( DATA_SAVER || DATA_SAVER_KEEP_OPEN ) && DATA_SENDER
   if(millis() - lastScan >= SCAN_TIME){;
-    for(int i=0; i<DATA_TO_SCAN/MAX_DATASET_DIMENSION; i++){
-      dataSaver.getData(dataSet, std::min(MAX_DATASET_DIMENSION, DATA_TO_SCAN));
-      BLEcom.send(dataSet, std::min(MAX_DATASET_DIMENSION, DATA_TO_SCAN));
+    int totalIteration = DATA_TO_SCAN/MAX_DATASET_DIMENSION
+    for(int i=0; i<totalIteration; i++){
+      int dataSize = (i == totalIterations) ? (DATA_TO_SCAN % MAX_DATASET_DIMENSION) : MAX_DATASET_DIMENSION;
+      dataSaver.getData(dataSet, dataSize);
+      BLEcom.send(dataSet, dataSize);
     }
-    dataSaver.getData(dataSet, DATA_PER_SET%MAX_DATASET_DIMENSION);
-    BLEcom.send(dataSet, DATA_PER_SET%MAX_DATASET_DIMENSION);
     lastScan = millis();
   }
   #endif
