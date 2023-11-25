@@ -45,7 +45,6 @@ void setup(){
     dataSaver.format();
     #endif
   #endif
-
   BHY2.begin();
   accel.begin();
   gyro.begin();
@@ -60,6 +59,7 @@ void setup(){
 }
 
 void loop(){
+  BHY2.update();
   static long lastDataSet = -DISTANCE_BETWEEN_SET;
   static long lastFileScan = 0;
   if(millis()-lastDataSet>=DISTANCE_BETWEEN_SET){

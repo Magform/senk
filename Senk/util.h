@@ -12,14 +12,17 @@
 
 inline void takeDataSet(Data dataSet[], int length, SensorXYZ *accel, SensorXYZ *gyro) {
   long time = -DATA_DISTANCE;
+  static long oldTime = 0;
   for (int i = 0; i < length; i++) {
-    if(millis()-time >= DATA_DISTANCE){
-      BHY2.update();
+    BHY2.update();
+    if(millis() - time >= DATA_DISTANCE){
       dataSet[i] = Data(accel->x(), accel->y(), accel->z(), gyro->x(), gyro->y(), gyro->z());
       time = millis();
       #if DEBUG_STATUS
-      Serial.print("Data taken at millis: ");
-      Serial.print(time);
+      long timeDiff = time - oldTime;
+      oldTime = millis();
+      Serial.print("Data between last data: ");
+      Serial.print(timeDiff);
       Serial.print(" -> ");
       const char* toPrint = dataSet[i].toString();
       Serial.println(toPrint);
