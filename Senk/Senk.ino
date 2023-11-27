@@ -45,14 +45,15 @@ void setup(){
     dataSaver.format();
     #endif
   #endif
+  
   BHY2.begin();
-  accel.begin();
-  gyro.begin();
+  accel.begin(1000/DATA_DISTANCE, 0);
+  gyro.begin(1000/DATA_DISTANCE, 0);
   //wait for sensor to start
   while(accel.x() == 0 || accel.y() == 0 || accel.z() == 0 || gyro.x() == 0 || gyro.y() == 0 || gyro.z() == 0){BHY2.update();}
 
   #if SEND_DATASET || SEND_DATASET_THREAD || DATA_SENDER
-  BLEcom.initialize();
+  BLECom.initialize();
   #endif
 
   debugPrint("done!");
@@ -83,7 +84,7 @@ long dataManager(Data dataSet[]){
     takeDataSet(dataSet, dataSize, &accel, &gyro);
     lastScan = millis();
     #if SEND_DATASET || SEND_DATASET_THREAD || DATA_SENDER
-    sendDataToBLE(dataSet, dataSize, &BLEcom);
+    sendDataToBLE(dataSet, dataSize, &BLECom);
     #endif
     #if DATA_SAVER || DATA_SAVER_KEEP_OPEN
     sendDataToSaver(dataSet, dataSize, &dataSaver);
@@ -101,7 +102,7 @@ long sendScanData(Data dataSet[]){
     int dataSize = (i == totalIteration) ? (DATA_TO_SCAN % MAX_DATASET_DIMENSION) : MAX_DATASET_DIMENSION;
       dataSaver.getData(dataSet, dataSize);
       lastScan = millis();
-      BLEcom.send(dataSet, dataSize);
+      BLECom.send(dataSet, dataSize);
     }
   }
   return lastScan;

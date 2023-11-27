@@ -12,13 +12,13 @@
 
 inline void takeDataSet(Data dataSet[], int length, SensorXYZ *accel, SensorXYZ *gyro) {
   long time = -DATA_DISTANCE;
-  static long oldTime = 0;
   for (int i = 0; i < length; i++) {
     BHY2.update();
     if(millis() - time >= DATA_DISTANCE){
       dataSet[i] = Data(accel->x(), accel->y(), accel->z(), gyro->x(), gyro->y(), gyro->z());
       time = millis();
       #if DEBUG_STATUS
+      static long oldTime = 0;
       long timeDiff = time - oldTime;
       oldTime = millis();
       Serial.print("Data between last data: ");
@@ -34,21 +34,22 @@ inline void takeDataSet(Data dataSet[], int length, SensorXYZ *accel, SensorXYZ 
 
 #if SEND_DATASET || SEND_DATASET_THREAD || DATA_SENDER
 #include "BLECommunication.h"
-inline void sendDataToBLE(Data dataSet[], int length, BLECommunication* BLEcom) {
+inline void sendDataToBLE(Data dataSet[], int length, BLECommunication* BLECom) {
   #if SEND_DATASET
-  BLEcom->send(dataSet, length);
+  BLECom->send(dataSet, length);
   #endif
 
   #if !SEND_DATASET && SEND_DATASET_THREAD
   static rtos::Semaphore dataAviableForBLE(0);
   static rtos::Semaphore dataSentForBLE(1);
   static rtos::Thread BLEsending;
+  static int toSend;
 
   dataSentForBLE.acquire();
   toSend = length;
   dataAviableForBLE.release();
-  BLEsending.start(mbed::callback([&BLEcom, &dataSet, &toSend, &dataAviableForBLE, &dataSentForBLE]() {
-    BLEcom->send(dataSet, &toSend, &dataAviableForBLE, &dataSentForBLE);
+  BLEsending.start(mbed::callback([&BLECom, &dataSet, &toSend, &dataAviableForBLE, &dataSentForBLE]() {
+    BLECom->send(dataSet, &toSend, &dataAviableForBLE, &dataSentForBLE);
   }));
   #endif
 }
