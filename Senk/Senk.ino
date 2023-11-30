@@ -1,53 +1,43 @@
 #include <Arduino.h>
-#include "Nicla_System.h"
-#include "Arduino_BHY2.h"
-#include <LittleFileSystem.h>
-
-//Configuration
-#include "Configuration.h"
-
-//Util
-#include "Data.h"
-#if DATA_SAVER || DATA_SAVER_KEEP_OPEN
-#include "DataSaver.h"
-#endif
-#if SEND_DATASET || SEND_DATASET_THREAD || DATA_SENDER
-#include "BLECommunication.h"
-#endif
-#if SEND_DATASET_THREAD
+#include <Nicla_System.h>
+#include <Arduino_BHY2.h>
 #include <mbed.h>
 #include <rtos.h>
 #include <platform/Callback.h>
-#endif
 
-//File system
+#include "Configuration.h"
+#include "Data.h"
+#include "util.h"
+
+//Initialize data saving
 #if DATA_SAVER || DATA_SAVER_KEEP_OPEN
+#include "DataSaver.h"
+#include <LittleFileSystem.h>
 mbed::LittleFileSystem fs(USER_ROOT);
 DataSaver dataSaver;
 #endif
 
-//Sensor to read
+//Initialize BLE communication
+#if SEND_DATASET || SEND_DATASET_THREAD || DATA_SENDER
+#include "BLECommunication.h"
+BLECommunication BLECom;
+#endif
+
+//Initialize sensor to read
 SensorXYZ accel(SENSOR_ID_ACC);
 SensorXYZ gyro(SENSOR_ID_GYRO);
 
-//util function declaration
-void takeDataSet(Data dataSet[], int length);
+Data dataSet[std::min(MAX_DATASET_DIMENSION, std::max(DATA_TO_SCAN, DATA_PER_SET))];
 
-#if SEND_DATASET || SEND_DATASET_THREAD || DATA_SENDER
-BLECommunication BLEcom;
+//Declaration of utility function
+long dataManager(Data dataSet[]);
+#if ( DATA_SAVER || DATA_SAVER_KEEP_OPEN ) && DATA_SENDER
+long sendScanData(Data dataSet[]);
 #endif
 
-#if !SEND_DATASET && SEND_DATASET_THREAD
-rtos::Semaphore dataAviableForBLE(0);
-rtos::Semaphore dataSentForBLE(1);
-rtos::Thread BLEsending;
-int toSend = 0;
-#endif
-
-void setup() {
+void setup(){
   Serial.begin(115200);
-
-  debugPrint("Initializing ");
+  debugPrint("Initializing");
 
   #if DATA_SAVER || DATA_SAVER_KEEP_OPEN
     dataSaver.initialize(SAVE_FILE_NAME);
@@ -55,84 +45,66 @@ void setup() {
     dataSaver.format();
     #endif
   #endif
-
+  
   BHY2.begin();
-  accel.begin();
-  gyro.begin();
-  while(accel.x() == 0 || accel.y() == 0 || accel.z() == 0){BHY2.update();} // wait for sensor to start
+  accel.begin(1000/DATA_DISTANCE, 0);
+  gyro.begin(1000/DATA_DISTANCE, 0);
+  //wait for sensor to start
+  while(accel.x() == 0 || accel.y() == 0 || accel.z() == 0 || gyro.x() == 0 || gyro.y() == 0 || gyro.z() == 0){BHY2.update();}
+
   #if SEND_DATASET || SEND_DATASET_THREAD || DATA_SENDER
-  BLEcom.initialize();
+  BLECom.initialize();
   #endif
 
-  debugPrint(" done!");
+  debugPrint("done!");
 }
 
 void loop(){
-  static auto lastSet = millis() - DISTANCE_BETWEEN_SET;
-  static auto lastScan = millis();
   BHY2.update();
-  
-  Data dataSet[std::min(MAX_DATASET_DIMENSION, std::max(DATA_TO_SCAN, DATA_PER_SET))];
-
-  if (millis() - lastSet >= DISTANCE_BETWEEN_SET){
-    int totalIteration = DATA_PER_SET/MAX_DATASET_DIMENSION;
-    for(int i=0; i<=totalIteration; i++){
-      
-      int dataSize = (i == totalIterations) ? DATA_PER_SET%MAX_DATASET_DIMENSION : MAX_DATASET_DIMENSION;
-
-      takeDataSet(dataSet, dataSize);
-      lastSet = millis();
-      
-      #if SEND_DATASET
-      BLEcom.send(dataSet, dataSize);
-      #endif
-      
-      #if !SEND_DATASET && SEND_DATASET_THREAD
-      dataSentForBLE.acquire();
-      toSend = dataSize;
-      dataAviableForBLE.release();
-      BLEsending.start(mbed::callback([&BLEcom, &dataSet, &toSend, &dataAviableForBLE, &dataSentForBLE]() {
-        BLEcom.send(dataSet, &toSend, &dataAviableForBLE, &dataSentForBLE);
-      }));
-      #endif
-
-      #if DATA_SAVER
-      dataSaver.saveData(dataSet, dataSize);
-      #endif
-      
-      #if DATA_SAVER_KEEP_OPEN && !DATA_SAVER
-      dataSaver.saveDataKeepOpen(dataSet, dataSize, DATA_PER_ITERATION);
-      #endif
-    }
+  static long lastDataSet = -DISTANCE_BETWEEN_SET;
+  static long lastFileScan = 0;
+  if(millis()-lastDataSet>=DISTANCE_BETWEEN_SET){
+    lastDataSet = dataManager(dataSet);
   }
-
   #if ( DATA_SAVER || DATA_SAVER_KEEP_OPEN ) && DATA_SENDER
-  if(millis() - lastScan >= SCAN_TIME){;
-    int totalIteration = DATA_TO_SCAN/MAX_DATASET_DIMENSION
-    for(int i=0; i<totalIteration; i++){
-      int dataSize = (i == totalIterations) ? (DATA_TO_SCAN % MAX_DATASET_DIMENSION) : MAX_DATASET_DIMENSION;
-      dataSaver.getData(dataSet, dataSize);
-      BLEcom.send(dataSet, dataSize);
-    }
+  if(millis()-lastFileScan>=SCAN_TIME){
+    lastFileScan = sendScanData(dataSet); 
+  }
+  #endif;
+}
+
+
+//Definition of utility function
+long dataManager(Data dataSet[]){
+  int totalIteration = DATA_PER_SET / MAX_DATASET_DIMENSION;
+  long lastScan = millis();
+  for (int i = 0; i <= totalIteration; i++) {
+    int dataSize = (i == totalIteration) ? (DATA_PER_SET % MAX_DATASET_DIMENSION) : MAX_DATASET_DIMENSION;
+      
+    takeDataSet(dataSet, dataSize, &accel, &gyro);
     lastScan = millis();
-  }
-  #endif
-  
-  delay(1);
-}
-
-//Function definition
-
-//Take data from accelerometer and gyroscope and add it to the dataset
-void takeDataSet(Data dataSet[], int length){
-  for(int i = 0; i<length; i++){
-    BHY2.update();
-    dataSet[i] = Data(accel.x(), accel.y(), accel.z(), gyro.x(), gyro.y(), gyro.z());
-    #if DEBUG_STATUS
-      const char* toPrint = dataSet[i].toString();
-      debugPrint(toPrint);
-      delete[] toPrint;
+    #if SEND_DATASET || SEND_DATASET_THREAD || DATA_SENDER
+    sendDataToBLE(dataSet, dataSize, &BLECom);
     #endif
-    delay(DATA_DISTANCE);
+    #if DATA_SAVER || DATA_SAVER_KEEP_OPEN
+    sendDataToSaver(dataSet, dataSize, &dataSaver);
+    #endif
   }
+  return lastScan;
 }
+
+#if ( DATA_SAVER || DATA_SAVER_KEEP_OPEN ) && DATA_SENDER
+long sendScanData(Data dataSet[]){
+  long lastScan = millis();
+  int totalIteration = DATA_TO_SCAN / MAX_DATASET_DIMENSION;
+
+  for (int i = 0; i <= totalIteration; i++) {
+    int dataSize = (i == totalIteration) ? (DATA_TO_SCAN % MAX_DATASET_DIMENSION) : MAX_DATASET_DIMENSION;
+      dataSaver.getData(dataSet, dataSize);
+      lastScan = millis();
+      BLECom.send(dataSet, dataSize);
+    }
+  }
+  return lastScan;
+}
+#endif

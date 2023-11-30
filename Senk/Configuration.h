@@ -6,14 +6,14 @@
 
 
 // Data configuration
-#define DATA_PER_SET 150 // Total numer of data in a dataset
-#define DATA_DISTANCE 1 // Milliseconds of distance between two different data
+#define DATA_PER_SET 10 // Total numer of data in a dataset
+#define DATA_DISTANCE 10 // Milliseconds of distance between two different data
 #define DISTANCE_BETWEEN_SET 10000 // Milliseconds to wait between two different dataset, The time is measured from the first data of the current dataset to the last data of the previous dataset
 #define MAX_DATASET_DIMENSION 150 // Since a dataset is stored in ram a dataset bigger than 150 cannot stay in RAM so to use bigger dataset we split it in dataset of the dimension chosed here and, based on other configuration, saved to local storage or send it usign BLE
 
 // Data saving configuration
 #define DATA_SAVER 0 // Set to 1 to enable saving data to local storage, 0 to disable
-#define DATA_SAVER_KEEP_OPEN 1 //Set to 1 to enable saving data to local storage without colosing the file every writing, need DATA_SAVER to be turned off
+#define DATA_SAVER_KEEP_OPEN 0 //Set to 1 to enable saving data to local storage without colosing the file every writing, need DATA_SAVER to be turned off
 #define DATA_PER_ITERATION 15 // Defines the maximum number of lines written per cicle, bigger number means fast but also more RAM expesnive (max value is 15)
 #define USER_ROOT "fs" // Root directory containing the file to save to
 #define DELETE_FILE 1 // Set to 1 to delete all files and only keep new data
@@ -35,6 +35,7 @@
 // Debug printing function
 
 #include <rtos.h>
+#include <Arduino.h>
 inline void debugPrint(const char* toPrint){
   #if DEBUG_STATUS
     static rtos::Semaphore serialSem(1);
