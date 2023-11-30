@@ -10,6 +10,8 @@ Within the scope of this project, prioritizing resource and energy efficiency em
 
 - **Utilization of BLE (Bluetooth Low Energy):** Leveraged BLE technology for data transmission, facilitating efficient communication with minimal power consumption compared to traditional Bluetooth, thus enhancing energy efficiency in data transfer operations.
 
+- **Utilization of Multiple Threads:** Employed multiple threads to continuously capture data between parts of the same dataset, ensuring minimal delay and ensuring consistent data flow throughout the application.
+
 ## 2. Energy consumption
 
 Work in progress

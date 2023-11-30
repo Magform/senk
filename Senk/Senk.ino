@@ -100,10 +100,9 @@ long sendScanData(Data dataSet[]){
 
   for (int i = 0; i <= totalIteration; i++) {
     int dataSize = (i == totalIteration) ? (DATA_TO_SCAN % MAX_DATASET_DIMENSION) : MAX_DATASET_DIMENSION;
-      dataSaver.getData(dataSet, dataSize);
-      lastScan = millis();
-      BLECom.send(dataSet, dataSize);
-    }
+    dataSaver.getData(dataSet, dataSize);
+    lastScan = millis();
+    BLECom.send(dataSet, dataSize);
   }
   return lastScan;
 }
