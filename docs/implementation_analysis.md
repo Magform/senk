@@ -32,6 +32,12 @@ This approach effectively saves energy and memory that would otherwise be unnece
 To enhance modularity and save more energy, the system organizes data into datasets. Specifically, data is collected every `DISTANCE_BETWEEN_SET` seconds, with `DATA_PER_SET` data points captured at intervals of `DATA_DISTANCE` from each other.\\
 This dataset approach allows for high-frequency data acquisition without continuous sampling, resulting in significant battery savings.
 
+#### DataSet splitting
+
+Given our device's limited RAM capacity, it's necessary to segment the dataset into smaller parts, each with a maximum length of `MAX_DATASET_DIMENSION` more info [here](https://senk.nicolasferraresso.dev/#/installation_and_configuration?id=data-configuration). After processing each segment of the complete dataset, the data is dynamically managed: it can either be stored in local memory or transmitted using Bluetooth Low Energy (BLE), depending on the configuration settings.\\
+It's important to acknowledge that this segmentation process might cause a minor slowdown, particularly when saving data to local storage. Consider this while optimizing for swift data processing. \\
+To optimize this process, we have introduced an option in the application to enable data transmission via BLE between one dataset part and another in a different thread. This ensures that the distance between various data remains unchanged. However, it's important to note that enabling this may result in a slight increase in energy consumption
+
 #### BLE Data Acquisition
 
 Data is shared via BLE, specifically through the creation of a `DataSend` service with a UUID specified in the configuration file. Within this service, two characteristics, namely `Accelerometer` and `Gyroscope`, are established. Both characteristics have UUIDs that can be configured through the settings file (for more information, refer to [here](https://senk.nicolasferraresso.dev/#/installation_and_configuration?id=data-transmission-configuration)).
@@ -87,7 +93,7 @@ Below is a concise overview of the class:
    - `format()`: Reformats the storage.
 3. **Data Saving and Retrieval:**
    - `saveData(Data toSave)`: Saves a single data entry to the file.
-   - `saveData(Data toSave[], int length, int dataPerIteration = 1)`: Saves an array of data entries to the file, closing and opening the file for evry writing, it split the data in group of dataPerIteration length(default: 1 line)..
+   - `saveData(Data toSave[], int length, int dataPerIteration = 1)`: Saves an array of data entries to the file, closing and opening the file for evry writing, it split the data in group of dataPerIteration length(default: 1 line).
    - `saveDataKeepOpen(Data toSave[], int length, int dataPerIteration = 1)`: Saves an array of data entries to the file, keeping the file open for all the instance, it split the data in group of dataPerIteration length(default: 1 line).
    - `getData(Data* dataSet, int dataToReturn)`: This function retrieves datasets from a file, populates the provided array `dataSet` with the retrieved data, and ensures that each dataset is retrieved only once. If there is insufficient data available in the file to meet the requested number of datasets (`dataToReturn`), the remaining portion of the `dataSet` array is filled with void-initialized data.
 4. **File Operations:**
@@ -107,3 +113,12 @@ The `BLECommunication` class serves as the central manager for Bluetooth Low Ene
     - `send(Data toSend[], int length)`: Sends an array of data entries using BLE. This method facilitates the transmission of multiple `Data` entries in succession.
     - `send(const Data dataSet[], int length, rtos::Semaphore *dataAviable, rtos::Semaphore *dataSent)`:  This method continuously waits for the `dataAvailable` semaphore to be acquired, then proceeds to send the provided array of `Data` entries via BLE. After sending all entries,releases the `dataSent` semaphore to signal that data has been sent.
   
+#### Util
+
+This collection comprises several utility functions designed specifically for this application. These functions rely on external dependencies such as the configuration file and are not thinked to be used outside this application.
+
+- `takeDataSet(Data dataSet[], int length, SensorXYZ *accel, SensorXYZ *gyro)`: Captures data from the accelerometer and gyroscope sensors at regular intervals (defined in the configuration file), populating the provided `dataSet` array. This function relies on sensor updates and time tracking via `millis()` to ensure data sampling occurs at defined intervals.
+
+- `sendDataToBLE(Data dataSet[], int length, BLECommunication* BLECom)`: If enabled by `SEND_DATASET`, `SEND_DATASET_THREAD`, or `DATA_SENDER` this function transmits the `dataSet` array via BLE. It utilizes concurrent handling mechanisms using `rtos::Semaphore` and `rtos::Thread` for multi-threaded data transmission if enable.
+
+- `sendDataToSaver(Data dataSet[], int length, DataSaver* dataSaver)`:  Depending on `DATA_SAVER` or `DATA_SAVER_KEEP_OPEN`, this function sends the `dataSet` array to a designated file. It provides alternate data-saving methods, such as keeping data storage open during all the saving process, depending on the configuration.

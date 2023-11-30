@@ -59,8 +59,9 @@ You can learn more about datasets [here](https://senk.nicolasferraresso.dev/#/im
   - For better performace is suggested to keep this lower than `MAX_DATASET_DIMENSION`
 
 - **DATA_DISTANCE:**
-  - Milliseconds of distance between two different data.
-  - Frist data is always taken at the startup
+  - Time interval in milliseconds between two consecutive sets of data.
+  - The first data set is captured at system startup.
+  - Under normal conditions (with `DEBUG_STATUS` disabled), the error in data capture timing is typically less than 0.5 millisecond. However, when `DEBUG_STATUS` is enabled, the timing error increases to approximately 15-16 milliseconds.
 
 - **DISTANCE_BETWEEN_SET:**
   - Milliseconds to wait between two different datasets. Measured from the first data of the current dataset to the last data of the previous dataset.
@@ -91,12 +92,14 @@ You can learn more about datasets [here](https://senk.nicolasferraresso.dev/#/im
 
 - **USER_ROOT:**
   - Specifies the root directory where the file will be saved. It is essential for this path to begin with "fs" to ensure proper file system navigation and storage functionality.
+  - The value should be enclosed within double quotation marks ("").
 
 - **DELETE_FILE:**
   - Set to `1` to delete all files and only keep new data.
 
 - **SAVE_FILE_NAME:**
   - Name of the file containing all saved data.
+  - The value should be enclosed within double quotation marks ("").
 
 ### Data Transmission configuration
 
