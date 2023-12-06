@@ -47,8 +47,8 @@ void setup(){
   #endif
   
   BHY2.begin();
-  accel.begin(1000/DATA_DISTANCE, 0);
-  gyro.begin(1000/DATA_DISTANCE, 0);
+  accel.begin();
+  gyro.begin();
   //wait for sensor to start
   while(accel.x() == 0 || accel.y() == 0 || accel.z() == 0 || gyro.x() == 0 || gyro.y() == 0 || gyro.z() == 0){BHY2.update();}
 
@@ -70,7 +70,14 @@ void loop(){
   if(millis()-lastFileScan>=SCAN_TIME){
     lastFileScan = sendScanData(dataSet); 
   }
-  #endif;
+  if(DISTANCE_BETWEEN_SET-millis()+lastDataSet>10 && SCAN_TIME-millis()+lastFileScan>10){
+    delay(std::min(DISTANCE_BETWEEN_SET-millis()+lastDataSet-10, SCAN_TIME-millis()+lastFileScan-10));
+  }
+  #else
+  if(DISTANCE_BETWEEN_SET-millis()+lastDataSet>10){
+    delay(DISTANCE_BETWEEN_SET-millis()+lastDataSet-10);
+  }
+  #endif
 }
 
 
