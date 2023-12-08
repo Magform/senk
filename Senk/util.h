@@ -44,13 +44,15 @@ inline void sendDataToBLE(Data dataSet[], int length, BLECommunication* BLECom) 
   static rtos::Semaphore dataSentForBLE(1);
   static rtos::Thread BLEsending;
   static int toSend;
-
+  
   dataSentForBLE.acquire();
+
   toSend = length;
   dataAviableForBLE.release();
-  BLEsending.start(mbed::callback([&BLECom, &dataSet, &toSend, &dataAviableForBLE, &dataSentForBLE]() {
+  BLEsending.start(mbed::callback([BLECom, dataSet, &toSend, &dataAviableForBLE, &dataSentForBLE]() {
     BLECom->send(dataSet, &toSend, &dataAviableForBLE, &dataSentForBLE);
   }));
+  
   #endif
 }
 #endif
