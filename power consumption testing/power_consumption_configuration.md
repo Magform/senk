@@ -199,6 +199,7 @@ Min: 13.0mW
 ### Test 12
 One dataSet of 10000 data with 1ms of distance between the data evry 10 seconds
 send DataSet enable
+For all the test a device was connected ad receiving data
 #### Theoretical
 
 #### Pratical
@@ -214,6 +215,8 @@ Min: 17.7mW
 ### Test 13
 One dataSet of 10000 data with 1ms of distance between the data evry 10 seconds
 send DataSetThread enable
+MAX_DATASET_DIMENSION reduced to 10 to give space for the Thread
+For all the test a device was connected ad receiving data
 #### Theoretical
 
 #### Pratical
