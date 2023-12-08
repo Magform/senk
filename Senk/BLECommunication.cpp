@@ -16,12 +16,13 @@ int BLECommunication::initialize(){
   }
 
   BLE.setLocalName("Senk");
-  BLE.setAdvertisedService("DataSend");
+  BLE.setAdvertisedService(DataSend);
   DataSend.addCharacteristic(Accelerometer);
   DataSend.addCharacteristic(Gyroscope);
   BLE.addService(DataSend);
   BLE.advertise();
-  
+  debugPrint("BLE configured");
+
   return 1;
 }
 

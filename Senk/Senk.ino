@@ -60,7 +60,7 @@ void setup(){
 }
 
 void loop(){
-  BHY2.update();
+    BHY2.update();
   static long lastDataSet = -DISTANCE_BETWEEN_SET;
   static long lastFileScan = 0;
   if(millis()-lastDataSet>=DISTANCE_BETWEEN_SET){
@@ -70,6 +70,7 @@ void loop(){
   if(millis()-lastFileScan>=SCAN_TIME){
     lastFileScan = sendScanData(dataSet); 
   }
+  
   if(DISTANCE_BETWEEN_SET-millis()+lastDataSet>10 && SCAN_TIME-millis()+lastFileScan>10){
     delay(std::min(DISTANCE_BETWEEN_SET-millis()+lastDataSet-10, SCAN_TIME-millis()+lastFileScan-10));
   }
@@ -87,15 +88,16 @@ long dataManager(Data dataSet[]){
   long lastScan = millis();
   for (int i = 0; i <= totalIteration; i++) {
     int dataSize = (i == totalIteration) ? (DATA_PER_SET % MAX_DATASET_DIMENSION) : MAX_DATASET_DIMENSION;
-      
-    takeDataSet(dataSet, dataSize, &accel, &gyro);
-    lastScan = millis();
-    #if SEND_DATASET || SEND_DATASET_THREAD || DATA_SENDER
-    sendDataToBLE(dataSet, dataSize, &BLECom);
-    #endif
-    #if DATA_SAVER || DATA_SAVER_KEEP_OPEN
-    sendDataToSaver(dataSet, dataSize, &dataSaver);
-    #endif
+    if(dataSize != 0){  
+      takeDataSet(dataSet, dataSize, &accel, &gyro);
+      lastScan = millis();
+      #if SEND_DATASET || SEND_DATASET_THREAD || DATA_SENDER
+      sendDataToBLE(dataSet, dataSize, &BLECom);
+      #endif
+      #if DATA_SAVER || DATA_SAVER_KEEP_OPEN
+      sendDataToSaver(dataSet, dataSize, &dataSaver);
+      #endif
+    }
   }
   return lastScan;
 }
@@ -104,12 +106,13 @@ long dataManager(Data dataSet[]){
 long sendScanData(Data dataSet[]){
   long lastScan = millis();
   int totalIteration = DATA_TO_SCAN / MAX_DATASET_DIMENSION;
-
   for (int i = 0; i <= totalIteration; i++) {
     int dataSize = (i == totalIteration) ? (DATA_TO_SCAN % MAX_DATASET_DIMENSION) : MAX_DATASET_DIMENSION;
-    dataSaver.getData(dataSet, dataSize);
-    lastScan = millis();
-    BLECom.send(dataSet, dataSize);
+    if(dataSize != 0){
+      dataSaver.getData(dataSet, dataSize);
+      lastScan = millis();
+      BLECom.send(dataSet, dataSize);
+    }
   }
   return lastScan;
 }

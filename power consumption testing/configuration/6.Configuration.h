@@ -1,10 +1,10 @@
 #ifndef Configuration_H_
 #define Configuration_H_
 
-#define DEBUG_STATUS 1
+#define DEBUG_STATUS 0
 
-#define DATA_PER_SET 1
-#define DATA_DISTANCE 0
+#define DATA_PER_SET 10000
+#define DATA_DISTANCE 1
 #define DISTANCE_BETWEEN_SET 10000
 #define MAX_DATASET_DIMENSION 150
 
