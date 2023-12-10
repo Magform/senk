@@ -140,9 +140,7 @@ void DataSaver::getData(Data* dataSet, int dataToReturn) {
           char* line = new char[length + 1];
           std::strncpy(line, buffer, length);
           line[length] = '\0'; // Null-terminate the substring
-          Serial.println(line);
           dataSet[i] = Data(line); // Store a pointer to the Data object in dataSet[i]
-          debugPrint("Data ready");
           delete[] line;
           memset(buffer, 0, MAX_LINE_LENGTH); // Clear the buffer for the next read
         } else {
