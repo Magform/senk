@@ -60,7 +60,7 @@ void setup(){
 }
 
 void loop(){
-    BHY2.update();
+  BHY2.update();
   static long lastDataSet = -DISTANCE_BETWEEN_SET;
   static long lastFileScan = 0;
   if(millis()-lastDataSet>=DISTANCE_BETWEEN_SET){
@@ -68,15 +68,22 @@ void loop(){
   }
   #if ( DATA_SAVER || DATA_SAVER_KEEP_OPEN ) && DATA_SENDER
   if(millis()-lastFileScan>=SCAN_TIME){
-    lastFileScan = sendScanData(dataSet); 
+    lastFileScan = millis();
+    sendScanData(dataSet); 
   }
   
-  if(DISTANCE_BETWEEN_SET-millis()+lastDataSet>10 && SCAN_TIME-millis()+lastFileScan>10){
-    delay(std::min(DISTANCE_BETWEEN_SET-millis()+lastDataSet-10, SCAN_TIME-millis()+lastFileScan-10));
+  long long timeNextDataSet = DISTANCE_BETWEEN_SET+lastDataSet;
+  timeNextDataSet -= millis();
+  long long timeNextScan = SCAN_TIME+lastFileScan;
+  timeNextScan -= millis();
+  if(timeNextDataSet>10 && timeNextScan>10){
+    delay(std::min(timeNextDataSet, timeNextScan));
   }
   #else
-  if(DISTANCE_BETWEEN_SET-millis()+lastDataSet>10){
-    delay(DISTANCE_BETWEEN_SET-millis()+lastDataSet-10);
+    long long timeNextDataSet = DISTANCE_BETWEEN_SET+lastDataSet;
+  timeNextDataSet -= millis();
+  if(timeNextDataSet>10){
+    delay(timeNextDataSet-10);
   }
   #endif
 }
