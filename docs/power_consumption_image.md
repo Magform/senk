@@ -50,4 +50,4 @@
 
 # [Test 17](https://senk.nicolasferraresso.dev/#/power_consumption?id=test-17)
 ![Test 17](media/power_consumption/T17.png?raw=true "Test 17")
-![Test 17 during sending](media/power_consumption/T17_sending.png?raw=true "Test 17")
+![Test 17 during sending](media/power_consumption/T17_sending.png?raw=true "Test 17 during sending")
