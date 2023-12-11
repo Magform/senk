@@ -71,6 +71,7 @@ You can learn more about datasets [here](https://senk.nicolasferraresso.dev/#/im
   - After processing each part of the complete dataset, the data is dynamically managed – either stored in local storage or transmitted using Bluetooth Low Energy (BLE), contingent on your configuration settings.
   - It's crucial to acknowledge that this segmentation process introduces a minor slowdown, especially when saving data to local storage. Take this into consideration while optimizing for swift data processing.
   - Note: When using all functionalities simultaneously, it is racommended to set this value equal or less than 150.
+  - If `SEND_DATASET_THREAD` is enable this value need to be reduced to 10.
   - Adjusting this value becomes crucial when aiming for optimal performance.
 
 ### Data Saving Configuration
@@ -120,7 +121,7 @@ You can learn more about datasets [here](https://senk.nicolasferraresso.dev/#/im
 
 - **SCAN_TIME:**
   - Sets the interval between two consecutive file scans.
-  - The specified time is taken after the completion of the previous scan.
+  - The specified time is taken at the start of the previous scan.
   - If new data is added during this interval, it will be sent.
 
 - **SERVICE_UUID:**

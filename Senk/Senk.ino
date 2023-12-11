@@ -47,8 +47,8 @@ void setup(){
   #endif
   
   BHY2.begin();
-  accel.begin(1000/DATA_DISTANCE, 0);
-  gyro.begin(1000/DATA_DISTANCE, 0);
+  accel.begin();
+  gyro.begin();
   //wait for sensor to start
   while(accel.x() == 0 || accel.y() == 0 || accel.z() == 0 || gyro.x() == 0 || gyro.y() == 0 || gyro.z() == 0){BHY2.update();}
 
@@ -68,9 +68,24 @@ void loop(){
   }
   #if ( DATA_SAVER || DATA_SAVER_KEEP_OPEN ) && DATA_SENDER
   if(millis()-lastFileScan>=SCAN_TIME){
-    lastFileScan = sendScanData(dataSet); 
+    lastFileScan = millis();
+    sendScanData(dataSet); 
   }
-  #endif;
+  
+  long long timeNextDataSet = DISTANCE_BETWEEN_SET+lastDataSet;
+  timeNextDataSet -= millis();
+  long long timeNextScan = SCAN_TIME+lastFileScan;
+  timeNextScan -= millis();
+  if(timeNextDataSet>10 && timeNextScan>10){
+    delay(std::min(timeNextDataSet, timeNextScan));
+  }
+  #else
+    long long timeNextDataSet = DISTANCE_BETWEEN_SET+lastDataSet;
+  timeNextDataSet -= millis();
+  if(timeNextDataSet>10){
+    delay(timeNextDataSet-10);
+  }
+  #endif
 }
 
 
@@ -80,15 +95,16 @@ long dataManager(Data dataSet[]){
   long lastScan = millis();
   for (int i = 0; i <= totalIteration; i++) {
     int dataSize = (i == totalIteration) ? (DATA_PER_SET % MAX_DATASET_DIMENSION) : MAX_DATASET_DIMENSION;
-      
-    takeDataSet(dataSet, dataSize, &accel, &gyro);
-    lastScan = millis();
-    #if SEND_DATASET || SEND_DATASET_THREAD || DATA_SENDER
-    sendDataToBLE(dataSet, dataSize, &BLECom);
-    #endif
-    #if DATA_SAVER || DATA_SAVER_KEEP_OPEN
-    sendDataToSaver(dataSet, dataSize, &dataSaver);
-    #endif
+    if(dataSize != 0){  
+      takeDataSet(dataSet, dataSize, &accel, &gyro);
+      lastScan = millis();
+      #if SEND_DATASET || SEND_DATASET_THREAD || DATA_SENDER
+      sendDataToBLE(dataSet, dataSize, &BLECom);
+      #endif
+      #if DATA_SAVER || DATA_SAVER_KEEP_OPEN
+      sendDataToSaver(dataSet, dataSize, &dataSaver);
+      #endif
+    }
   }
   return lastScan;
 }
@@ -97,12 +113,13 @@ long dataManager(Data dataSet[]){
 long sendScanData(Data dataSet[]){
   long lastScan = millis();
   int totalIteration = DATA_TO_SCAN / MAX_DATASET_DIMENSION;
-
   for (int i = 0; i <= totalIteration; i++) {
     int dataSize = (i == totalIteration) ? (DATA_TO_SCAN % MAX_DATASET_DIMENSION) : MAX_DATASET_DIMENSION;
-    dataSaver.getData(dataSet, dataSize);
-    lastScan = millis();
-    BLECom.send(dataSet, dataSize);
+    if(dataSize != 0){
+      dataSaver.getData(dataSet, dataSize);
+      lastScan = millis();
+      BLECom.send(dataSet, dataSize);
+    }
   }
   return lastScan;
 }

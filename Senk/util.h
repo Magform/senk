@@ -21,7 +21,7 @@ inline void takeDataSet(Data dataSet[], int length, SensorXYZ *accel, SensorXYZ 
       static long oldTime = 0;
       long timeDiff = time - oldTime;
       oldTime = millis();
-      Serial.print("Data between last data: ");
+      Serial.print("Time between last data: ");
       Serial.print(timeDiff);
       Serial.print(" -> ");
       const char* toPrint = dataSet[i].toString();
@@ -44,13 +44,15 @@ inline void sendDataToBLE(Data dataSet[], int length, BLECommunication* BLECom) 
   static rtos::Semaphore dataSentForBLE(1);
   static rtos::Thread BLEsending;
   static int toSend;
-
+  
   dataSentForBLE.acquire();
+
   toSend = length;
   dataAviableForBLE.release();
-  BLEsending.start(mbed::callback([&BLECom, &dataSet, &toSend, &dataAviableForBLE, &dataSentForBLE]() {
+  BLEsending.start(mbed::callback([BLECom, dataSet, &toSend, &dataAviableForBLE, &dataSentForBLE]() {
     BLECom->send(dataSet, &toSend, &dataAviableForBLE, &dataSentForBLE);
   }));
+  
   #endif
 }
 #endif
@@ -59,7 +61,7 @@ inline void sendDataToBLE(Data dataSet[], int length, BLECommunication* BLECom) 
 #include "DataSaver.h"
 inline void sendDataToSaver(Data dataSet[], int length, DataSaver* dataSaver) {
   #if DATA_SAVER
-  dataSaver->saveData(dataSet, length);
+  dataSaver->saveData(dataSet, length, DATA_PER_ITERATION);
   #endif
 
   #if DATA_SAVER_KEEP_OPEN && !DATA_SAVER
