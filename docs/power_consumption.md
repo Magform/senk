@@ -19,7 +19,7 @@ One dataSet of one data every 10 seconds
 `theoretical_consumption = (sleeping_time * sleeping_current + working_time * working_current)/(sleeping_time + working_time) = (10000ms * 0.2mA + 1ms * 9mA)/10001ms = 0.2009mA`  
 `theoretical_power = (sleeping_time * sleeping_power + working_time * working_power)/(sleeping_time + working_time) = (10000ms * 0.66mW + 1ms * 27.8mW)/10001ms = 0.6630mW`  
 #### Pratical
-[image of the result](https://senk.nicolasferraresso.dev/power_consumption_image?id=test-1)
+[image of the result](https://senk.nicolasferraresso.dev/#/power_consumption_image?id=test-1)
 ##### Current
 Max: 13.5mA  
 AVG: 8.42mA  
@@ -37,7 +37,7 @@ One dataSet of 150 data with a distance of 1ms between the data every 100sec
 `theoretical_consumption = (sleeping_time * sleeping_current + working_time * working_current)/(sleeping_time + working_time) = (100000ms * 0.2mA + 150ms * 9mA)/100150ms = 0.2131mA`  
 `theoretical_power = (sleeping_time * sleeping_power + working_time * working_power)/(sleeping_time + working_time) = (100000ms * 0.66mW + 150ms * 30mW)/100150ms = 0.7039mW`  
 #### Pratical
-[image of the result](https://senk.nicolasferraresso.dev/power_consumption_image?id=test-2)
+[image of the result](https://senk.nicolasferraresso.dev/#/power_consumption_image?id=test-2)
 ##### Current
 Max: 13.5mA  
 AVG: 8.42mA  
@@ -54,7 +54,7 @@ One dataSet of 150 data with a distance of 1ms between the data continuosly
 `theoretical_consumption = (sleeping_time * sleeping_current + working_time * working_current)/(sleeping_time + working_time) = (150ms * 9mA)/150ms = 9mA`  
 `theoretical_power = (sleeping_time * sleeping_power + working_time * working_power)/(sleeping_time + working_time) = (150ms * 30mW)/150ms = 30mW`  
 #### Pratical
-[image of the result](https://senk.nicolasferraresso.dev/power_consumption_image?id=test-3)
+[image of the result](https://senk.nicolasferraresso.dev/#/power_consumption_image?id=test-3)
 ##### Current
 Max: 13.1mA  
 AVG: 8.33mA  
@@ -71,7 +71,7 @@ One dataSet of 10000 data with 1ms of distance between the data every 10 seconds
 `theoretical_consumption = (sleeping_time * sleeping_current + working_time * working_current)/(sleeping_time + working_time) = (10000ms * 0.2mA + 10000ms * 9mA)/20000ms = 4.6mA`  
 `theoretical_power = (sleeping_time * sleeping_power + working_time * working_power)/(sleeping_time + working_time) = (10000ms * 0.66mW + 10000ms * 30mW)/20000ms = 15.33mW`  
 #### Pratical
-[image of the result](https://senk.nicolasferraresso.dev/power_consumption_image?id=test-4)
+[image of the result](https://senk.nicolasferraresso.dev/#/power_consumption_image?id=test-4)
 ##### Current
 Max: 13.6mA  
 AVG: 8.54mA  
@@ -88,7 +88,7 @@ One dataSet of 10000 data with a distance of 1ms between the data every 100 seco
 `theoretical_consumption = (sleeping_time * sleeping_current + working_time * working_current)/(sleeping_time + working_time) = (100000ms * 0.2mA + 10000ms * 9mA)/110000ms = 1mA`  
 `theoretical_power = (sleeping_time * sleeping_power + working_time * working_power)/(sleeping_time + working_time) = (100000ms * 0.66mW + 10000ms * 30mW)/110000ms = 3.33mW`  
 #### Pratical
-[image of the result](https://senk.nicolasferraresso.dev/power_consumption_image?id=test-5)
+[image of the result](https://senk.nicolasferraresso.dev/#/power_consumption_image?id=test-5)
 ##### Current
 Max: 13.5mA  
 AVG: 8.33mA  
@@ -105,7 +105,7 @@ One dataSet of 10000 data with a distance of 10ms between the data every 10 seco
 `theoretical_consumption = (sleeping_time * sleeping_current + working_time * working_current)/(sleeping_time + working_time) = (10000ms * 0.2mA + 100000ms * 9mA)/110000ms = 8.2mA`  
 `theoretical_power = (sleeping_time * sleeping_power + working_time * working_power)/(sleeping_time + working_time) = (10000ms * 0.66mW + 100000ms * 30mW)/110000ms = 27.33mW`  
 #### Pratical
-[image of the result](https://senk.nicolasferraresso.dev/power_consumption_image?id=test-6)
+[image of the result](https://senk.nicolasferraresso.dev/#/power_consumption_image?id=test-6)
 ##### Current
 Max: 13.6mA  
 AVG: 8.51mA  
@@ -122,7 +122,7 @@ One dataSet of 10000 data with a distance of 1ms between the data every 10 secon
 `theoretical_consumption = (sleeping_time * sleeping_current + working_time * working_current)/(sleeping_time + working_time) = (10000ms * 0.2mA + 10000ms * 9mA)/20000ms = 4.6mA`  
 `theoretical_power = (sleeping_time * sleeping_power + working_time * working_power)/(sleeping_time + working_time) = (10000ms * 0.66mW + 10000ms * 30mW)/20000ms = 15.33mW`  
 #### Pratical
-[image of the result](https://senk.nicolasferraresso.dev/power_consumption_image?id=test-7)
+[image of the result](https://senk.nicolasferraresso.dev/#/power_consumption_image?id=test-7)
 ##### Current
 Max: 14.1mA  
 AVG: 8.51mA  
@@ -139,7 +139,7 @@ One datSet of 10000 data with a distance of 10ms between the data every 100sec
 `theoretical_consumption = (sleeping_time * sleeping_current + working_time * working_current)/(sleeping_time + working_time) = (100000ms * 0.2mA + 100000ms * 9mA)/200000ms = 4.6mA`  
 `theoretical_power = (sleeping_time * sleeping_power + working_time * working_power)/(sleeping_time + working_time) = (100000ms * 0.66mW + 100000ms * 30mW)/200000ms = 15.33mW`  
 #### Pratical
-[image of the result](https://senk.nicolasferraresso.dev/power_consumption_image?id=test-8)
+[image of the result](https://senk.nicolasferraresso.dev/#/power_consumption_image?id=test-8)
 ##### Current
 Max: 13.7mA  
 AVG: 8.59mA  
@@ -158,7 +158,7 @@ dataSaver enable and 1 dataPerIteration
 `theoretical_consumption = ( (sleeping_time-saving_time) * sleeping_current + working_time * working_current + saving_current * saving_time)/(sleeping_time + working_time) = (50000ms * 0.2mA + 150ms * 9mA + 50000ms * 10mA)/100150ms = 5.10mA`  
 `theoretical_power = ( (sleeping_time-saving_time) * sleeping_power + working_time * working_power)/(sleeping_time + working_time) = (50000ms * 0.66mW + 150ms * 30mW + 50000ms * 35mW)/100150ms = 17.848mW`  
 #### Pratical
-[image of the result](https://senk.nicolasferraresso.dev/power_consumption_image?id=test-9)
+[image of the result](https://senk.nicolasferraresso.dev/#/power_consumption_image?id=test-9)
 ##### Current
 Max: 18.3mA  
 AVG: 7.36mA  
@@ -177,7 +177,7 @@ dataSaverKeepOpen enable and 1 dataPerIteration
 `theoretical_consumption = ( (sleeping_time-saving_time) * sleeping_current + working_time * working_current + saving_current * saving_time)/(sleeping_time + working_time) = (97000ms * 0.2mA + 150ms * 9mA + 3000ms * 10mA)/100150ms = 0.51mA`  
 `theoretical_power = ( (sleeping_time-saving_time) * sleeping_power + working_time * working_power)/(sleeping_time + working_time) = (97000ms * 0.66mW + 150ms * 30mW + 3000ms * 35mW)/100150ms = 1.733mW`   
 #### Pratical
-[image of the result](https://senk.nicolasferraresso.dev/power_consumption_image?id=test-10)
+[image of the result](https://senk.nicolasferraresso.dev/#/power_consumption_image?id=test-10)
 ##### Current
 Max: 14.9mA  
 AVG: 5.99mA  
@@ -196,7 +196,7 @@ dataSaver enable and 15 dataPerIteration
 `theoretical_consumption = ( (sleeping_time-saving_time) * sleeping_current + working_time * working_current + saving_current * saving_time)/(sleeping_time + working_time) = (95000ms * 0.2mA + 150ms * 9mA + 5000ms * 10mA)/100150ms = 0.702mA`  
 `theoretical_power = ( (sleeping_time-saving_time) * sleeping_power + working_time * working_power)/(sleeping_time + working_time) = (95000ms * 0.66mW + 150ms * 30mW + 5000ms * 35mW)/100150ms = 2.418mW`   
 #### Pratical
-[image of the result](https://senk.nicolasferraresso.dev/power_consumption_image?id=test-11)
+[image of the result](https://senk.nicolasferraresso.dev/#/power_consumption_image?id=test-11)
 ##### Current
 Max: 17.1mA  
 AVG: 6.04mA  
@@ -215,7 +215,7 @@ dataSaverKeepOpen enable and 15 dataPerIteration
 `theoretical_consumption = ( (sleeping_time-saving_time) * sleeping_current + working_time * working_current + saving_current * saving_time)/(sleeping_time + working_time) = (97000ms * 0.2mA + 150ms * 9mA + 3000ms * 10mA)/100150ms = 0.51mA`  
 `theoretical_power = ( (sleeping_time-saving_time) * sleeping_power + working_time * working_power)/(sleeping_time + working_time) = (97000ms * 0.66mW + 150ms * 30mW + 3000ms * 35mW)/100150ms = 1.733mW` 
 #### Pratical
-[image of the result](https://senk.nicolasferraresso.dev/power_consumption_image?id=test-12)
+[image of the result](https://senk.nicolasferraresso.dev/#/power_consumption_image?id=test-12)
 ##### Current
 Max: 15.4mA  
 AVG: 5.66mA  
@@ -234,7 +234,7 @@ send DataSet enable
 `theoretical_consumption = ( (sleeping_time-sending_time) * sleeping_current + working_time * working_current + sending_current * saving_time)/(sleeping_time + working_time) = (6666ms * 0.2mA + 10000ms * 9mA + 3333ms * 8mA)/20000ms = 5.89mA`  
 `theoretical_power = ( (sleeping_time-sending_time) * sleeping_power + working_time * working_power + sending_power * saving_time)/(sleeping_time + working_time) = (6666ms * 0.66mW + 10000ms * 30mW + 3333ms * 28mW)/20000ms = 19.886mW`   
 #### Pratical
-[image of the result](https://senk.nicolasferraresso.dev/power_consumption_image?id=test-13)
+[image of the result](https://senk.nicolasferraresso.dev/#/power_consumption_image?id=test-13)
 ##### Current
 Max: 13.9mA  
 AVG: 8.50mA  
@@ -254,7 +254,7 @@ MAX_DATASET_DIMENSION reduced to 10 to give space for the Thread
 `theoretical_consumption = ( sleeping_time * sleeping_current + working_time * working_current + sending_current * saving_time)/(sleeping_time + working_time + saving_time) = (10000ms * 0.2mA + 10000ms * 9mA + 3333ms * 8mA)/23333ms = 5.086mA`  
 `theoretical_power = ( sleeping_time * sleeping_power + working_time * working_power + sending_power * saving_time)/(sleeping_time + working_time) = (10000ms * 0.66mW + 10000ms * 30mW + 3333ms * 28mW)/23333ms = 17.140mW` 
 #### Pratical
-[image of the result](https://senk.nicolasferraresso.dev/power_consumption_image?id=test-14)
+[image of the result](https://senk.nicolasferraresso.dev/#/power_consumption_image?id=test-14)
 ##### Current
 Max: 14.3mA  
 AVG: 8.51mA  
@@ -271,7 +271,7 @@ enable dataSender with 150 dataToScan and scanTime of 10sec
 #### Theoretical
 
 #### Pratical
-[image of the result](https://senk.nicolasferraresso.dev/power_consumption_image?id=test-15)
+[image of the result](https://senk.nicolasferraresso.dev/#/power_consumption_image?id=test-15)
 ##### Current
 Max: 17.8mA  
 AVG: 7.8mA  
@@ -288,7 +288,7 @@ enable dataSender with 15000 dataToScan and scanTime of 10sec
 #### Theoretical
 
 #### Pratical
-[image of the result](https://senk.nicolasferraresso.dev/power_consumption_image?id=test-16)
+[image of the result](https://senk.nicolasferraresso.dev/#/power_consumption_image?id=test-16)
 ##### Current
 Max: 17.2mA  
 AVG: 8.45mA  
@@ -305,7 +305,7 @@ enable dataSender with 15000 dataToScan and scanTime of 1000sec
 #### Theoretical
 
 #### Pratical
-[image of the result](https://senk.nicolasferraresso.dev/power_consumption_image?id=test-17)
+[image of the result](https://senk.nicolasferraresso.dev/#/power_consumption_image?id=test-17)
 ##### Current
 Max: 17.9mA  
 AVG: 7.29mA  
