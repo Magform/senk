@@ -120,7 +120,7 @@ You can learn more about datasets [here](https://senk.nicolasferraresso.dev/#/im
 
 - **SCAN_TIME:**
   - Sets the interval between two consecutive file scans.
-  - The specified time is taken after the completion of the previous scan.
+  - The specified time is taken at the start of the previous scan.
   - If new data is added during this interval, it will be sent.
 
 - **SERVICE_UUID:**
