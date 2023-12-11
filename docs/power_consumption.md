@@ -6,12 +6,14 @@ Details
     - the sleep state between one dataset and another gave a consumption of approximately 0.2mA and 0.66mW
     - the dataset taking give a consumption of 9mA and 30mW.
     - the dataset saving give a consumption of 10mA and 35mW for iteration/3 seconds
-    - the dataset saving keeping the file open give a consumption of 10mA and 35mW for 3 seconds for evry saving process
+    - the dataset saving keeping the file open give a consumption of 10mA and 35mW for 3 seconds for every saving process
+    - sending a data using BLE use 8mA, 28mW and it sends 3000 data/second
+    - This theoretical part is a big aproximation so it's not accurate
 - With some tests it was noticed that the device has an initial transient, where consumption increases as time passes, quite long so the data was taken for 10 minutes and after this initial transient.
 - Measurements conducted using an Otii Arc Pro for accuracy
 
 ### Test 1
-One dataSet of one data evry 10 seconds
+One dataSet of one data every 10 seconds  
 #### Theoretical
 `working_time = dataSet * dataDistance = 1*1 = 1ms`  
 `theoretical_consumption = (sleeping_time * sleeping_current + working_time * working_current)/(sleeping_time + working_time) = (10000ms * 0.2mA + 1ms * 9mA)/10001ms = 0.2009mA`  
@@ -29,7 +31,7 @@ Min: 17.4mW
 
 
 ### Test 2
-One dataSet of 150 data with a distance of 1ms between the data evry 100sec
+One dataSet of 150 data with a distance of 1ms between the data every 100sec  
 #### Theoretical
 `working_time = dataSet * dataDistance = 150*1 = 150ms`  
 `theoretical_consumption = (sleeping_time * sleeping_current + working_time * working_current)/(sleeping_time + working_time) = (100000ms * 0.2mA + 150ms * 9mA)/100150ms = 0.2131mA`  
@@ -46,7 +48,7 @@ Avg: 27.8mW
 Min: 18.6mW  
 
 ### Test 3
-One dataSet of 150 data with a distance of 1ms between the data continuosly
+One dataSet of 150 data with a distance of 1ms between the data continuosly  
 #### Theoretical
 `working_time = dataSet * dataDistance = 150*1 = 150ms`  
 `theoretical_consumption = (sleeping_time * sleeping_current + working_time * working_current)/(sleeping_time + working_time) = (150ms * 9mA)/150ms = 9mA`  
@@ -63,7 +65,7 @@ Avg: 27.5mW
 Min: 21.7mW  
 
 ### Test 4
-One dataSet of 10000 data with 1ms of distance between the data evry 10 seconds
+One dataSet of 10000 data with 1ms of distance between the data every 10 seconds  
 #### Theoretical
 `working_time = dataSet * dataDistance = 10000*1 = 10000ms`  
 `theoretical_consumption = (sleeping_time * sleeping_current + working_time * working_current)/(sleeping_time + working_time) = (10000ms * 0.2mA + 10000ms * 9mA)/20000ms = 4.6mA`  
@@ -80,7 +82,7 @@ Avg: 28.2mW
 Min: 17.6mW  
 
 ### Test 5
-One dataSet of 10000 data with a distance of 1ms between the data evry 100 seconds
+One dataSet of 10000 data with a distance of 1ms between the data every 100 seconds  
 #### Theoretical
 `working_time = dataSet * dataDistance = 10000*1 = 10000ms`  
 `theoretical_consumption = (sleeping_time * sleeping_current + working_time * working_current)/(sleeping_time + working_time) = (100000ms * 0.2mA + 10000ms * 9mA)/110000ms = 1mA`  
@@ -97,7 +99,7 @@ Avg: 27.5mW
 Min: 18.3mW  
 
 ### Test 6
-One dataSet of 10000 data with a distance of 10ms between the data evry 10 seconds
+One dataSet of 10000 data with a distance of 10ms between the data every 10 seconds  
 #### Theoretical
 `working_time = dataSet * dataDistance = 10000*10 = 100000ms`  
 `theoretical_consumption = (sleeping_time * sleeping_current + working_time * working_current)/(sleeping_time + working_time) = (10000ms * 0.2mA + 100000ms * 9mA)/110000ms = 8.2mA`  
@@ -114,7 +116,7 @@ Avg: 28.1mW
 Min: 18.1mW  
 
 ### Test 7
-One dataSet of 10000 data with a distance of 1ms between the data evry 10 seconds
+One dataSet of 10000 data with a distance of 1ms between the data every 10 seconds  
 #### Theoretical
 `working_time = dataSet * dataDistance = 10000*1 = 10000ms`  
 `theoretical_consumption = (sleeping_time * sleeping_current + working_time * working_current)/(sleeping_time + working_time) = (10000ms * 0.2mA + 10000ms * 9mA)/20000ms = 4.6mA`  
@@ -131,7 +133,7 @@ Avg: 28.1mW
 Min: 17.5mW  
 
 ### Test 8
-One datSet of 10000 data with a distance of 10ms between the data evry 100sec
+One datSet of 10000 data with a distance of 10ms between the data every 100sec  
 #### Theoretical
 `working_time = dataSet * dataDistance = 10000*10 = 100000ms`  
 `theoretical_consumption = (sleeping_time * sleeping_current + working_time * working_current)/(sleeping_time + working_time) = (100000ms * 0.2mA + 100000ms * 9mA)/200000ms = 4.6mA`  
@@ -148,8 +150,8 @@ Avg: 28.4mW
 Min: 19.1mW  
 
 ### Test 9
-One dataSet of 150 data with a distance of 1ms between the data evry 100sec
-dataSaver enable and 1 dataPerIteration
+One dataSet of 150 data with a distance of 1ms between the data every 100sec  
+dataSaver enable and 1 dataPerIteration  
 #### Theoretical
 `working_time = dataSet * dataDistance = 150*1 = 150ms`  
 `saving_time = (dataSet/datePerIteration)*1000/3 = 150*333ms = 50000ms`   
@@ -167,8 +169,8 @@ Avg: 24.3mW
 Min: 14.2mW  
 
 ### Test 10
-One dataSet of 150 data with a distance of 1ms between the data evry 100sec
-dataSaverKeepOpen enable and 1 dataPerIteration
+One dataSet of 150 data with a distance of 1ms between the data every 100sec  
+dataSaverKeepOpen enable and 1 dataPerIteration  
 #### Theoretical
 `working_time = dataSet * dataDistance = 150*1 = 50ms`  
 `saving_time = 3000ms`   
@@ -186,8 +188,8 @@ Avg: 19.8mW
 Min: 13.9mW  
 
 ### Test 11
-One dataSet of 150 data with a distance of 1ms between the data evry 100sec
-dataSaver enable and 15 dataPerIteration
+One dataSet of 150 data with a distance of 1ms between the data every 100sec  
+dataSaver enable and 15 dataPerIteration  
 #### Theoretical
 `working_time = dataSet * dataDistance = 150*1 = 150ms`  
 `saving_time = (dataSet/datePerIteration)*1000/3 = ms = 5000ms`   
@@ -205,8 +207,8 @@ Avg: 20mW
 Min: 13.9mW  
 
 ### Test 12
-One dataSet of 150 data with a distance of 1ms between the data evry 100sec
-dataSaverKeepOpen enable and 15 dataPerIteration
+One dataSet of 150 data with a distance of 1ms between the data every 100sec
+dataSaverKeepOpen enable and 15 dataPerIteration   
 #### Theoretical
 `working_time = dataSet * dataDistance = 150*1 = 50ms`  
 `saving_time = 3000ms`   
@@ -224,10 +226,13 @@ Avg: 18.7mW
 Min: 13.0mW  
 
 ### Test 13
-One dataSet of 10000 data with 1ms of distance between the data evry 10 seconds
-send DataSet enable
+One dataSet of 10000 data with 1ms of distance between the data every 10 seconds  
+send DataSet enable  
 #### Theoretical
-
+`working_time = dataSet * dataDistance = 10000*1 = 10000ms`  
+`sending_time = dataSet*1000/3000 = ms = 3333ms`   
+`theoretical_consumption = ( (sleeping_time-sending_time) * sleeping_current + working_time * working_current + sending_current * saving_time)/(sleeping_time + working_time) = (6666ms * 0.2mA + 10000ms * 9mA + 3333ms * 8mA)/20000ms = 5.89mA`  
+`theoretical_power = ( (sleeping_time-sending_time) * sleeping_power + working_time * working_power + sending_power * saving_time)/(sleeping_time + working_time) = (6666ms * 0.66mW + 10000ms * 30mW + 3333ms * 28mW)/20000ms = 19.886mW`   
 #### Pratical
 [image of the result](https://senk.nicolasferraresso.dev/power_consumption_image?id=test-13)
 ##### Current
@@ -240,11 +245,14 @@ Avg: 28.0mW
 Min: 17.7mW  
 
 ### Test 14
-One dataSet of 10000 data with 1ms of distance between the data evry 10 seconds
-send DataSetThread enable
-MAX_DATASET_DIMENSION reduced to 10 to give space for the Thread
+One dataSet of 10000 data with 1ms of distance between the data every 10 seconds  
+send DataSetThread enable  
+MAX_DATASET_DIMENSION reduced to 10 to give space for the Thread  
 #### Theoretical
-
+`working_time = dataSet * dataDistance = 10000*1 = 10000ms`  
+`sending_time = dataSet*1000/3000 = ms = 3333ms`   
+`theoretical_consumption = ( sleeping_time * sleeping_current + working_time * working_current + sending_current * saving_time)/(sleeping_time + working_time + saving_time) = (10000ms * 0.2mA + 10000ms * 9mA + 3333ms * 8mA)/23333ms = 5.086mA`  
+`theoretical_power = ( sleeping_time * sleeping_power + working_time * working_power + sending_power * saving_time)/(sleeping_time + working_time) = (10000ms * 0.66mW + 10000ms * 30mW + 3333ms * 28mW)/23333ms = 17.140mW` 
 #### Pratical
 [image of the result](https://senk.nicolasferraresso.dev/power_consumption_image?id=test-14)
 ##### Current
@@ -257,9 +265,9 @@ Avg: 28.1mW
 Min: 18.3mW  
 
 ### Test 15
-One dataSet of 150 data with a distance of 1ms between the data evry 10sec
-dataSaver enable and 15 dataPerIteration
-enable dataSender with 150 dataToScan and scanTime of 10sec
+One dataSet of 150 data with a distance of 1ms between the data every 10sec  
+dataSaver enable and 15 dataPerIteration    
+enable dataSender with 150 dataToScan and scanTime of 10sec  
 #### Theoretical
 
 #### Pratical
@@ -274,9 +282,9 @@ Avg: 25.8mW
 Min: 14.2mW  
 
 ### Test 16
-One dataSet of 150 data with a distance of 1ms between the data evry 10sec
-dataSaver enable and 15 dataPerIteration
-enable dataSender with 15000 dataToScan and scanTime of 10sec
+One dataSet of 150 data with a distance of 1ms between the data every 10sec  
+dataSaver enable and 15 dataPerIteration  
+enable dataSender with 15000 dataToScan and scanTime of 10sec  
 #### Theoretical
 
 #### Pratical
@@ -291,9 +299,9 @@ Avg: 27.9mW
 Min: 14.5mW  
 
 ### Test 17
-One dataSet of 150 data with a distance of 1ms between the data evry 10sec
-dataSaver enable and 15 dataPerIteration
-enable dataSender with 15000 dataToScan and scanTime of 1000sec
+One dataSet of 150 data with a distance of 1ms between the data every 10sec  
+dataSaver enable and 15 dataPerIteration  
+enable dataSender with 15000 dataToScan and scanTime of 1000sec  
 #### Theoretical
 
 #### Pratical
