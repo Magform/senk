@@ -6,8 +6,8 @@ Details
   - the sleep state between one dataset and another gave a consumption of approximately 0.46mA
   - The non sleep state give a consumption of 7.1mA
   - The dataset taking give a consumption of +1.958mA.
-  - Opening and closing a file saving data take 170ms and use +2.5mA [obtained experimentally]
-  - Opening and closing a file reading data take 3ms and use +2.5mA the whole time[obtained experimentally]
+  - Opening and closing a file for writing data takes 230ms and takes 10ms each iteration using +2.5mA [obtained experimentally]
+  - pening and closing a file for writing data takes 6ms and takes 10ms each iteration using +2.5mA the whole time [obtained experimentally]
   - Sending a data using BLE take and use 1.22mA for 0.4ms
 - With some tests it was noticed that the device has an initial transient, where consumption increases as time passes, quite long so the data was taken for 10 minutes and after this initial transient.
 - Measurements conducted using an Otii Arc Pro for accuracy
@@ -255,7 +255,7 @@ enable dataSender with 150 dataToScan and scanTime of 10sec
 #### Theoretical
 `working_time = dataSet * dataDistance = 150 * 1ms = 150ms`  
 `saving_time = (file_opening + file_closing) * time_to_open = (10+10) * 170ms = 3400ms`  
-`reading_and_sending_time = (file_opening + file_closing) * time_to_open + dataSet * sending_time = (1+1) * 5ms + 150 * 0.4ms = 70ms`  
+`reading_and_sending_time = (file_opening + file_closing) * time_to_open + dataSet * sending_time = (1+1) * 5ms + 150 * 0.4ms = 70ms`  1 second
 `theoretical_consumption = ( (sleeping_time - saving_time - reading_and_sending_time) * sleeping_current + working_time * working_current + saving_time * saving_current + reading_and_sending_time * reading_and_sending_current)/(sleeping_time + working_time) = (6530 * 0.46 + 150 * 9.058 + 3400 * 9.6 + 70 * 10.82)/10150ms = 3.72 mA`
 #### Pratical
 [image of the result](https://senk.nicolasferraresso.dev/#/power_consumption_image?id=test-15)
