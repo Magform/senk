@@ -1,7 +1,9 @@
 # Power consumption
 
 ## Test
+
 Details
+
 - The current implementation uses delay() as a sleep function between two different dataSet which does not cause a true deep sleep in the microcontroller. Because of this we added a theoretical part to the tests where we hypothesize how much the consumption would be if:
   - the sleep state between one dataset and another gave a consumption of approximately 0.46mA
   - The non sleep state give a consumption of 7.1mA
@@ -13,43 +15,68 @@ Details
 - Measurements conducted using an Otii Arc Pro for accuracy
 
 ### Test 1
+
 One dataSet of one data every 10 seconds  
+
 #### Theoretical
-`working_time = dataSet * dataDistance = 1*1 = 1ms`  
-`theoretical_consumption = (sleeping_time * sleeping_current + working_time * working_current)/(sleeping_time + working_time) = (10000ms * 0.46mA + 1ms * 9.058mA)/10001ms = 0.46mA`
+
+- - `working_time = dataSet * dataDistance = 1*1 = 1ms`  
+- - `theoretical_consumption = (sleeping_time * sleeping_current + working_time * working_current)/(sleeping_time + working_time) = (10000ms * 0.46mA + 1ms * 9.058mA)/10001ms = 0.46mA`
+
 #### Pratical
+
 [image of the result](https://senk.nicolasferraresso.dev/#/power_consumption_image?id=test-1)
+
 ##### Current
+
 Max: 13.5mA  
 AVG: 8.42mA  
 Min: 5.17mA  
+
 ##### Power
+
 Max: 44.3mW  
 Avg: 27.8mW  
 Min: 17.4mW  
 
 ### Test 2
+
 One dataSet of 150 data with a distance of 1ms between the data every 100sec  
+
 #### Theoretical
-`working_time = dataSet * dataDistance = 150*1 = 150ms`  
-`theoretical_consumption = (sleeping_time * sleeping_current + working_time * working_current)/(sleeping_time + working_time) = (100000ms * 0.46mA + 150ms * 9.058mA)/100150ms = 0.4728mA`  
+
+- - `working_time = dataSet * dataDistance = 150*1 = 150ms`  
+- - `theoretical_consumption = (sleeping_time * sleeping_current + working_time * working_current)/(sleeping_time + working_time) = (100000ms * 0.46mA + 150ms * 9.058mA)/100150ms = 0.4728mA`  
+
 #### Pratical
+
 [image of the result](https://senk.nicolasferraresso.dev/#/power_consumption_image?id=test-2)
+
 ##### Current
+
 Max: 13.5mA  
 AVG: 8.42mA  
 Min: 5.48mA  
+
 ##### Power
+
 Max: 44.5mW  
 Avg: 27.8mW  
 Min: 18.6mW  
 
 ### Test 3
+
 One dataSet of 150 data with a distance of 1ms between the data continuosly  
+
 #### Theoretical
-`theoretical_consumption = (working_time * working_current)/(working_time) = (150ms * 9.058mA)/150ms = 9.058mA`  
+
+- - `working_time = dataSet * dataDistance = 150 * 1ms = 150ms`
+- - `theoretical_consumption = (working_time * working_current)/(working_time) = (150ms * 9.058mA)/150ms = 9.058mA`  
+
 #### Pratical
+
 [image of the result](https://senk.nicolasferraresso.dev/#/power_consumption_image?id=test-3)
+
 ##### Current
 Max: 13.1mA  
 AVG: 8.33mA  
@@ -60,10 +87,13 @@ Avg: 27.5mW
 Min: 21.7mW  
 
 ### Test 4
+
 One dataSet of 10000 data with 1ms of distance between the data every 10 seconds  
 #### Theoretical
-`working_time = dataSet * dataDistance = 10000*1 = 10000ms`  
-`theoretical_consumption = (sleeping_time * sleeping_current + working_time * working_current)/(sleeping_time + working_time) = (10000ms * 0.46mA + 10000ms * 9.058mA)/20000ms = 4.759mA`  
+
+- - `working_time = dataSet * dataDistance = 10000*1 = 10000ms`  
+- - `theoretical_consumption = (sleeping_time * sleeping_current + working_time * working_current)/(sleeping_time + working_time) = (10000ms * 0.46mA + 10000ms * 9.058mA)/20000ms = 4.759mA`  
+
 #### Pratical
 [image of the result](https://senk.nicolasferraresso.dev/#/power_consumption_image?id=test-4)
 ##### Current
@@ -76,10 +106,13 @@ Avg: 28.2mW
 Min: 17.6mW  
 
 ### Test 5
+
 One dataSet of 10000 data with a distance of 1ms between the data every 100 seconds  
 #### Theoretical
-`working_time = dataSet * dataDistance = 10000*1 = 10000ms`  
-`theoretical_consumption = (sleeping_time * sleeping_current + working_time * working_current)/(sleeping_time + working_time) = (100000ms * 0.46mA + 10000ms * 9.058mA)/110000ms = 1.24mA`  
+
+- - `working_time = dataSet * dataDistance = 10000*1 = 10000ms`  
+- - `theoretical_consumption = (sleeping_time * sleeping_current + working_time * working_current)/(sleeping_time + working_time) = (100000ms * 0.46mA + 10000ms * 9.058mA)/110000ms = 1.24mA`  
+
 #### Pratical
 [image of the result](https://senk.nicolasferraresso.dev/#/power_consumption_image?id=test-5)
 ##### Current
@@ -92,10 +125,13 @@ Avg: 27.5mW
 Min: 18.3mW  
 
 ### Test 6
+
 One dataSet of 10000 data with a distance of 10ms between the data every 10 seconds  
 #### Theoretical
-`working_time = dataSet * dataDistance = 10000*10 = 100000ms`  
-`theoretical_consumption = (sleeping_time * sleeping_current + working_time * working_current)/(sleeping_time + working_time) = (10000ms * 0.46mA + 100000ms * 9.058mA)/110000ms = 8.75mA`
+
+- - `working_time = dataSet * dataDistance = 10000*10 = 100000ms`  
+- - `theoretical_consumption = (sleeping_time * sleeping_current + working_time * working_current)/(sleeping_time + working_time) = (10000ms * 0.46mA + 100000ms * 9.058mA)/110000ms = 8.75mA`
+
 #### Pratical
 [image of the result](https://senk.nicolasferraresso.dev/#/power_consumption_image?id=test-6)
 ##### Current
@@ -108,10 +144,13 @@ Avg: 28.1mW
 Min: 18.1mW  
 
 ### Test 7
+
 One dataSet of 10000 data with a distance of 1ms between the data every 10 seconds  
 #### Theoretical
-`working_time = dataSet * dataDistance = 10000*1 = 10000ms`  
-`theoretical_consumption = (sleeping_time * sleeping_current + working_time * working_current)/(sleeping_time + working_time) = (10000ms * 0.46mA + 10000ms * 9.058mA)/20000ms = 4.759mA`  
+
+- `working_time = dataSet * dataDistance = 10000*1 = 10000ms`  
+- `theoretical_consumption = (sleeping_time * sleeping_current + working_time * working_current)/(sleeping_time + working_time) = (10000ms * 0.46mA + 10000ms * 9.058mA)/20000ms = 4.759mA`  
+
 #### Pratical
 [image of the result](https://senk.nicolasferraresso.dev/#/power_consumption_image?id=test-7)
 ##### Current
@@ -124,10 +163,13 @@ Avg: 28.1mW
 Min: 17.5mW  
 
 ### Test 8
+
 One datSet of 10000 data with a distance of 10ms between the data every 100sec  
 #### Theoretical
-`working_time = dataSet * dataDistance = 10000*10 = 100000ms`  
-`theoretical_consumption = (sleeping_time * sleeping_current + working_time * working_current)/(sleeping_time + working_time) = (100000ms * 0.46mA + 100000ms * 9.058mA)/200000ms = 4.759mA`
+
+- `working_time = dataSet * dataDistance = 10000*10 = 100000ms`  
+- `theoretical_consumption = (sleeping_time * sleeping_current + working_time * working_current)/(sleeping_time + working_time) = (100000ms * 0.46mA + 100000ms * 9.058mA)/200000ms = 4.759mA`
+
 #### Pratical
 [image of the result](https://senk.nicolasferraresso.dev/#/power_consumption_image?id=test-8)
 ##### Current
@@ -140,12 +182,15 @@ Avg: 28.4mW
 Min: 19.1mW  
 
 ### Test 9
+
 One dataSet of 150 data with a distance of 1ms between the data every 100sec  
 dataSaver enable and 1 dataPerIteration  
 #### Theoretical
-`working_time = dataSet * dataDistance = 150*1 = 150ms`  
-`saving_time = (file_opening+file_closing) * time_to_open  + iteration * iteration_time = (150+150)*230ms + 150 * 10 = 70500ms`  
-`theoretical_consumption = ( (sleeping_time-saving_time) * sleeping_current + working_time * working_current + saving_current * saving_time)/(sleeping_time + working_time) = (29500ms * 0.46mA + 150ms * 9.058mA + 70500ms * 9.6mA)/100150ms = 6.907mA`  
+
+- `working_time = dataSet * dataDistance = 150*1 = 150ms`  
+- `saving_time = (file_opening+file_closing) * time_to_open  + iteration * iteration_time = (150+150)*230ms + 150 * 10 = 70500ms`  
+- `theoretical_consumption = ( (sleeping_time-saving_time) * sleeping_current + working_time * working_current + saving_current * saving_time)/(sleeping_time + working_time) = (29500ms * 0.46mA + 150ms * 9.058mA + 70500ms * 9.6mA)/100150ms = 6.907mA`  
+
 #### Pratical
 [image of the result](https://senk.nicolasferraresso.dev/#/power_consumption_image?id=test-9)
 ##### Current
@@ -158,12 +203,15 @@ Avg: 24.3mW
 Min: 14.2mW  
 
 ### Test 10
+
 One dataSet of 150 data with a distance of 1ms between the data every 100sec  
 dataSaverKeepOpen enable and 1 dataPerIteration  
 #### Theoretical
-`working_time = dataSet * dataDistance = 150*1 = 50ms`  
-`saving_time = (file_opening+file_closing) * time_to_open + iteration * iteration_time = (1+1) * 230 + 150 * 10 = 1960ms`  
-`theoretical_consumption = ( (sleeping_time-saving_time) * sleeping_current + working_time * working_current + saving_current * saving_time)/(sleeping_time + working_time) = (98040ms * 0.46mA + 150ms * 9.058mA + 1960ms * 9.6mA)/100150ms = 0.652mA`  
+
+- `working_time = dataSet * dataDistance = 150*1 = 50ms`  
+- `saving_time = (file_opening+file_closing) * time_to_open + iteration * iteration_time = (1+1) * 230 + 150 * 10 = 1960ms`  
+- `theoretical_consumption = ( (sleeping_time-saving_time) * sleeping_current + working_time * working_current + saving_current * saving_time)/(sleeping_time + working_time) = (98040ms * 0.46mA + 150ms * 9.058mA + 1960ms * 9.6mA)/100150ms = 0.652mA`  
+
 #### Pratical
 [image of the result](https://senk.nicolasferraresso.dev/#/power_consumption_image?id=test-10)
 ##### Current
@@ -176,12 +224,15 @@ Avg: 19.8mW
 Min: 13.9mW  
 
 ### Test 11
+
 One dataSet of 150 data with a distance of 1ms between the data every 100sec  
 dataSaver enable and 15 dataPerIteration  
 #### Theoretical
-`working_time = dataSet * dataDistance = 150*1 = 150ms`  
-`saving_time = (file_opening+file_closing) * time_to_open + iteration * iteration_time = (10+10) * 230ms + 10 * 10 = 4700ms`  
-`theoretical_consumption = ( (sleeping_time-saving_time) * sleeping_current + working_time * working_current + saving_current * saving_time)/(sleeping_time + working_time) = (95300ms * 0.46mA + 150ms * 9.058mA + 4700ms * 9.6mA)/100150ms = 0.902mA`  
+
+- `working_time = dataSet * dataDistance = 150*1 = 150ms`  
+- `saving_time = (file_opening+file_closing) * time_to_open + iteration * iteration_time = (10+10) * 230ms + 10 * 10 = 4700ms`  
+- `theoretical_consumption = ( (sleeping_time-saving_time) * sleeping_current + working_time * working_current + saving_current * saving_time)/(sleeping_time + working_time) = (95300ms * 0.46mA + 150ms * 9.058mA + 4700ms * 9.6mA)/100150ms = 0.902mA`  
+
 #### Pratical
 [image of the result](https://senk.nicolasferraresso.dev/#/power_consumption_image?id=test-11)
 ##### Current
@@ -194,12 +245,15 @@ Avg: 20mW
 Min: 13.9mW  
 
 ### Test 12
+
 One dataSet of 150 data with a distance of 1ms between the data every 100sec  
 dataSaverKeepOpen enable and 15 dataPerIteration  
 #### Theoretical
-`working_time = dataSet * dataDistance = 150*1 = 150ms`  
-`saving_time = (file_opening+file_closing) * time_to_open + iteration * iteration_time= (1+1) * 230 + 10 * 10 = 560ms`  
-`theoretical_consumption = ( (sleeping_time-saving_time) * sleeping_current + working_time * working_current + saving_current * saving_time)/(sleeping_time + working_time) = (99560ms * 0.46mA + 150ms * 9.058mA + 560ms * 9.6mA)/100150ms = 0.524mA`  
+
+- `working_time = dataSet * dataDistance = 150*1 = 150ms`  
+- `saving_time = (file_opening+file_closing) * time_to_open + iteration * iteration_time= (1+1) * 230 + 10 * 10 = 560ms`  
+- `theoretical_consumption = ( (sleeping_time-saving_time) * sleeping_current + working_time * working_current + saving_current * saving_time)/(sleeping_time + working_time) = (99560ms * 0.46mA + 150ms * 9.058mA + 560ms * 9.6mA)/100150ms = 0.524mA`  
+
 #### Pratical
 [image of the result](https://senk.nicolasferraresso.dev/#/power_consumption_image?id=test-12)
 ##### Current
@@ -212,12 +266,15 @@ Avg: 18.7mW
 Min: 13.0mW  
 
 ### Test 13
+
 One dataSet of 10000 data with 1ms of distance between the data every 10 seconds  
 send DataSet enable  
 #### Theoretical
-`working_time = dataSet * dataDistance = 10000*1 = 10000ms`  
-`sending_time = dataSet*0.4 = 10000 * 0.4ms = 4000ms`  
-`theoretical_consumption = ( (sleeping_time-sending_time) * sleeping_current + working_time * working_current + sending_current * sending_time)/(sleeping_time + working_time) = (6000ms * 0.46mA + 10000ms * 9.058mA + 4000ms * 8.22mA)/20000ms = 6.31mA`  
+
+- `working_time = dataSet * dataDistance = 10000*1 = 10000ms`  
+- `sending_time = dataSet*0.4 = 10000 * 0.4ms = 4000ms`  
+- `theoretical_consumption = ( (sleeping_time-sending_time) * sleeping_current + working_time * working_current + sending_current * sending_time)/(sleeping_time + working_time) = (6000ms * 0.46mA + 10000ms * 9.058mA + 4000ms * 8.22mA)/20000ms = 6.31mA`  
+
 #### Pratical
 [image of the result](https://senk.nicolasferraresso.dev/#/power_consumption_image?id=test-13)
 ##### Current
@@ -230,13 +287,16 @@ Avg: 28.0mW
 Min: 17.7mW  
 
 ### Test 14
+
 One dataSet of 10000 data with 1ms of distance between the data every 10 seconds  
 send DataSetThread enable  
 MAX_DATASET_DIMENSION reduced to 10 to give space for the Thread  
 #### Theoretical
-`working_time = dataSet * dataDistance = 10000*1 = 10000ms`  
-`sending_time = dataSet*0.4 = 10000 * 0.4ms = 4000ms`  
-`theoretical_consumption = ( (sleeping_time-sending_time) * sleeping_current + working_time * working_current + sending_current * sending_time)/(sleeping_time + working_time) = (6000ms * 0.46mA + 10000ms * 9.058mA + 4000ms * 8.22mA)/20000ms = 6.31mA`  
+
+- `working_time = dataSet * dataDistance = 10000*1 = 10000ms`  
+- `sending_time = dataSet*0.4 = 10000 * 0.4ms = 4000ms`  
+- `theoretical_consumption = ( (sleeping_time-sending_time) * sleeping_current + working_time * working_current + sending_current * sending_time)/(sleeping_time + working_time) = (6000ms * 0.46mA + 10000ms * 9.058mA + 4000ms * 8.22mA)/20000ms = 6.31mA`  
+
 #### Pratical
 [image of the result](https://senk.nicolasferraresso.dev/#/power_consumption_image?id=test-14)
 ##### Current
@@ -249,14 +309,17 @@ Avg: 28.1mW
 Min: 18.3mW  
 
 ### Test 15
+
 One dataSet of 150 data with a distance of 1ms between the data every 10sec  
 dataSaver enable and 15 dataPerIteration  
 enable dataSender with 150 dataToScan and scanTime of 10sec  
 #### Theoretical
-`working_time = dataSet * dataDistance = 150 * 1ms = 150ms`  
-`saving_time = (file_opening + file_closing) * time_to_open + iteration * iteration_time = (10+10) * 230ms + 10 * 10= 4700ms`  
-`reading_and_sending_time = (file_opening + file_closing) * time_to_open + iteration * iteration_time + sending_data * sending_time = (1+1) * 6ms + 150 * 10 + 150 * 0.4ms = 1572ms`  
-`theoretical_consumption = ( (sleeping_time - saving_time - reading_and_sending_time) * sleeping_current + working_time * working_current + saving_time * saving_current + reading_and_sending_time * reading_and_sending_current)/(sleeping_time + working_time) = (3728 * 0.46 + 150 * 9.058 + 4700 * 9.6 + 1572 * 10.82)/10150ms = 6.42 mA`
+
+- `working_time = dataSet * dataDistance = 150 * 1ms = 150ms`  
+- `saving_time = (file_opening + file_closing) * time_to_open + iteration * iteration_time = (10+10) * 230ms + 10 * 10= 4700ms`  
+- `reading_and_sending_time = (file_opening + file_closing) * time_to_open + iteration * iteration_time + sending_data * sending_time = (1+1) * 6ms + 150 * 10 + 150 * 0.4ms = 1572ms`  
+- `theoretical_consumption = ( (sleeping_time - saving_time - reading_and_sending_time) * sleeping_current + working_time * working_current + saving_time * saving_current + reading_and_sending_time * reading_and_sending_current)/(sleeping_time + working_time) = (3728 * 0.46 + 150 * 9.058 + 4700 * 9.6 + 1572 * 10.82)/10150ms = 6.42 mA`
+
 #### Pratical
 [image of the result](https://senk.nicolasferraresso.dev/#/power_consumption_image?id=test-15)
 ##### Current
@@ -269,15 +332,18 @@ Avg: 25.8mW
 Min: 14.2mW  
 
 ### Test 16
+
 One dataSet of 150 data with a distance of 1ms between the data every 10sec  
 dataSaver enable and 15 dataPerIteration  
 enable dataSender with 15000 dataToScan and scanTime of 10sec  
 #### Theoretical
-`working_time = dataSet * dataDistance = 150 * 1ms = 150ms`  
-`saving_time = (file_opening + file_closing) * time_to_open + iteration * iteration_time = (10+10) * 230ms + 10 * 10= 4700ms`  
-`reading_and_sending_time = (file_opening + file_closing) * time_to_open + iteration * iteration_time + sending_data * sending_time = (1+1) * 6ms + 150 * 10ms + 150 * 0.4ms = 1572ms`  
+
+- `working_time = dataSet * dataDistance = 150 * 1ms = 150ms`  
+- `saving_time = (file_opening + file_closing) * time_to_open + iteration * iteration_time = (10+10) * 230ms + 10 * 10= 4700ms`  
+- `reading_and_sending_time = (file_opening + file_closing) * time_to_open + iteration * iteration_time + sending_data * sending_time = (1+1) * 6ms + 150 * 10ms + 150 * 0.4ms = 1572ms`  
 `reading_time = (file_opening + file_closing) * time_to_open = (99+99) * 6ms = 1188ms`  
-`theoretical_consumption = ( (sleeping_time - saving_time - reading_and_sending_time - reading_time) * sleeping_current + working_time * working_current + saving_time * saving_current + reading_and_sending_time * reading_and_sending_current + reading_time * reading_current)/(sleeping_time + working_time) = (2540ms * 0.46mA + 150ms * 9.058mA + 4700ms * 9.6mA + 1572ms * 10.82mA + 1188 * 9.6mA)/10150ms = 7.494 mA`
+- `theoretical_consumption = ( (sleeping_time - saving_time - reading_and_sending_time - reading_time) * sleeping_current + working_time * working_current + saving_time * saving_current + reading_and_sending_time * reading_and_sending_current + reading_time * reading_current)/(sleeping_time + working_time) = (2540ms * 0.46mA + 150ms * 9.058mA + 4700ms * 9.6mA + 1572ms * 10.82mA + 1188 * 9.6mA)/10150ms = 7.494 mA`
+
 #### Pratical
 [image of the result](https://senk.nicolasferraresso.dev/#/power_consumption_image?id=test-16)
 ##### Current
@@ -290,15 +356,18 @@ Avg: 27.9mW
 Min: 14.5mW  
 
 ### Test 17
+
 One dataSet of 150 data with a distance of 1ms between the data every 10sec  
 dataSaver enable and 15 dataPerIteration  
 enable dataSender with 15000 dataToScan and scanTime of 1000sec  
 #### Theoretical
-`working_time = dataSet * dataDistance = 150 * 1ms = 150ms`  
-`saving_time = (file_opening + file_closing) * time_to_open + iteration * iteration_time = (10+10) * 230ms + 10 * 10 = 4700ms`  
-`reading_and_sending_time = (file_opening + file_closing) * time_to_open + iteration * iteration_time + sending_data * sending_time = (100+100) * 6ms + 15000 * 10ms + 15000 * 0.4ms = 16800ms`  
-`AVG_current_no_sending = ((sleeping_time - saving_time) * sleeping_current + working_time * working_current + saving_time * saving_current )/(sleeping_time+sending_time) = (5300ms * 0.46mA + 150ms * 9.058mA + 4700ms * 9.6mA)/(10150ms) = 4.82mA`  
-`teoretical_consumption = (1000000 * AVG_current_no_sending + reading_and_sending_time * reading_and_sending_current)(scanTime + reading_and_sending_time) = (1000000*4.82+ 16800 * 10.82 )/(1000000+16800) = 4.919mA`  
+
+- `working_time = dataSet * dataDistance = 150 * 1ms = 150ms`  
+- `saving_time = (file_opening + file_closing) * time_to_open + iteration * iteration_time = (10+10) * 230ms + 10 * 10 = 4700ms`  
+- `reading_and_sending_time = (file_opening + file_closing) * time_to_open + iteration * iteration_time + sending_data * sending_time = (100+100) * 6ms + 15000 * 10ms + 15000 * 0.4ms = 16800ms`  
+- `AVG_current_no_sending = ((sleeping_time - saving_time) * sleeping_current + working_time * working_current + saving_time * saving_current )/(sleeping_time+sending_time) = (5300ms * 0.46mA + 150ms * 9.058mA + 4700ms * 9.6mA)/(10150ms) = 4.82mA`  
+- `teoretical_consumption = (1000000 * AVG_current_no_sending + reading_and_sending_time * reading_and_sending_current)(scanTime + reading_and_sending_time) = (1000000*4.82+ 16800 * 10.82 )/(1000000+16800) = 4.919mA`  
+
 #### Pratical
 [image of the result](https://senk.nicolasferraresso.dev/#/power_consumption_image?id=test-17)
 ##### Current
@@ -329,23 +398,53 @@ Conclusions were drawn from theoretical results but would not differ much if pra
 - Test 2 and Test 3 used.
 - The distance between showed consistently higher power due to less sleeping time.
 
-### Disable vs enable dataSaver
+### Disable vs enable data_saver
 
 - Test 2, Test 9 and Test 11 used.
-- Enabling dataSaver with low `DATA_PER_ITERATION` show a huge increase in power consumption due to a really slow saving process.
-- Enabling dataSaver with high `DATA_PER_ITERATION` show a reasonable increase in consumption because saving process is a lot faster than with low `DATA_PER_ITERATION`.
+- Enabling `DATA_SAVER` with low `DATA_PER_ITERATION` show a huge increase in power consumption due to a really slow saving process.
+- Enabling `DATA_SAVER` with high `DATA_PER_ITERATION` show a reasonable increase in consumption because saving process is a lot faster than with low `DATA_PER_ITERATION`.
 
-### Disable vs enable dataSaverKeepOpen
+### Disable vs enable data_saver_keep_open
 
-- Test 2, Test 10 and Test 12 used
-- 
+- Test 2, Test 10 and Test 12 used.
+- Enabling `DATA_SAVER_KEEP_OPEN` with low `DATA_PER_ITERATION` give a reasonable increase in consumption (lower than `DATA_SAVER` with high `DATA_PER_ITERATION`) because the slower part in the process is the opening and closing of the file.
+- Enabling `DATA_SAVER` with high `DATA_PER_ITERATION` give a small improvement in power consumption compared to using low `DATA_PER_ITERATION`.
 
-### Disable vs enable sendDataSet
+### data_saver vs data_saver_keep_open
 
-### Disable vs enable sendDataSet Thread
+- Test 9, Test 10, Test 11 and Test 12 used.
+- Given that the most time-consuming part is opening and closing the file, therefore, with the associated saving of the data present, opening and closing the file once is very advantageous. So using `DATA_SAVER_KEEP_OPEN` is much more power efficient than using `DATA_SAVER`.
+- The impact of increasing the size of `DATA_PER_ITERATION` is much greater in the case of `DATA_SAVER` than that of `DATA_SAVER_KEEP_OPEN`, since in `DATA_SAVER` the file is opened and closed every iteration.
+  
+### Disable vs enable send_dataSet
 
-### Disable vs enable dataSender
+- Test 4 and Test 13 used
+- Enabling data transmission slightly increased power consumption, primarily influenced by the amount of data to be sent.
 
-### Bigger vs smaller dataToScan
+### Disable vs enable send_dataSet_thread
 
-### Bigger vs smaller scanTime
+- Test 4 and Test 14 used
+- Enabling data transmission slightly increased power consumption, primarily influenced by the amount of data to be sent.
+
+### send_dataSet vs send_dataSet_thread
+
+- Test 13 and Test 14 used
+- No significant difference was detected in whether or not multiple threads were used, the only thing to note is that you are forced to use smaller `MAX_DATASET_DIMENSION`
+- In practical tests it is also seen that in the case of `SEND_DATASET_THREAD`, although the average consumption remains almost constant there are greater fluctuations
+  
+### Disable vs enable data_sender
+
+- Test 2, Test 11, Test 13, Test 15 used
+- Enabling the data sender function led to higher power consumption than sending the data directly, presumably due to the additional processing required to write and read data.
+
+### Bigger vs smaller data_to_scan
+
+- Test 15, Test 16 and Test 17 used
+- Scanning the file to attempt reading non-existent data leads to a low additional power consumption as it requires opening and closing the file for every `MAX_DATASET_DIMENSION` of scanned data.
+- Scanning the file to read and send more data give a reasonable amount of power consumption, in particulare we get about `data_to_scan*(12/max_dataSet_dimension + 10.04)ms` at 10.82mA
+
+### Bigger vs smaller scan_time
+
+- Test 15, Test 16 and Test 17 used
+- Scanning a file less frequent but reading and sending more data give a big improve instead of reading the file a lot of time to read and send small data, but we need to remeber that if this time, that is `data_to_scan*(12/max_dataSet_dimension + 10.04)ms` is more than the sleeping time we are loosing some data.
+  
