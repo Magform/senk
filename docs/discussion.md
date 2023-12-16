@@ -12,9 +12,38 @@ Within the scope of this project, prioritizing resource and energy efficiency em
 
 - **Utilization of Multiple Threads:** Employed multiple threads to continuously capture data between parts of the same dataset, ensuring minimal delay and ensuring consistent data flow throughout the application.
 
-## 2. Energy consumption
+## 2. Power consumption
 
-Work in progress
+For a more comprehensive explanation of the tests carried out and the results identified, see the section [power consumption](https://senk.nicolasferraresso.dev/#/power_consumption)
+
+### DataSet Size and Intervals
+
+- **Larger Datasets:** Demonstrated higher power consumption due to prolonged active periods during data reading.
+- **Data Point Intervals:** Higher intervals showed increased power consumption due to extended working time for data reading.
+- **Set Intervals:** Larger intervals consistently resulted in lower power consumption due to increased sleeping times between data set processing.
+
+### Data Saver Settings
+
+- **Data Saver:** Showcased significant power differences based on varying `DATA_PER_ITERATION` values.
+- **Data Saver Keep Open:** Energy efficiency improved a lot compared to `DATA_SAVER`, especially with lower `DATA_PER_ITERATION``, reducing the total file opening and file closing operation.
+
+### Data Transmission Methods
+
+- **Send DataSet:** Slightly increased power consumption, primarily influenced by the volume of data to be sent.
+- **Send DataSet Thread:** Marginal differences in power consumption compared to non-thread transmission, but notable fluctuations observed in practice tests.
+- **Data Sender:** Increased power consumption due to additional processing involved in writing and reading data from internal storage.
+
+### Scanning and Transmission Parameters
+
+- **Data_to_Scan:** Significant power consumption variation based on scanning for actual versus non-existent data.
+- **Scan Time:** Adjusting scan times showcased a trade-off between intervals and data read, impacting power efficiency and risking data loss if reading time exceeds sleeping time.
+
+### Overall Observations
+
+- **Optimization Balance:** Optimizing file handling processes and transmission methods is critical for power efficiency.
+- **System Dynamics:** Understanding the interplay of intervals, dataset size, and transmission settings aids in maximizing performance while conserving energy.
+
+These observations underscore the importance of meticulous system configuration to strike an optimal balance between performance and energy consumption across various operational scenarios.
 
 ## 3 Future plan
 

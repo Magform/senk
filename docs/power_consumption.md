@@ -383,68 +383,79 @@ Min: 12.2mW
 
 Conclusions were drawn from theoretical results but would not differ much if practical results were used instead
 
-### Bigger vs smaller dataSet
+### Bigger vs Smaller DataSets
   
-- Test 2 and Test 5 used.
-- Larger data sets showed higher power consumption due to prolonged active periods.
+- **Test Scenarios**: Test 2 and Test 5 were used.
+- **Observations**:
+  - **Increased Consumption with Larger Datasets**: Larger datasets demonstrated higher power consumption due to prolonged active periods during data reading.
+
+### Bigger vs Smaller Data Distance
   
-### Bigger vs smaller data_distance
+- **Test Scenarios**: Test 4 and Test 6 were examined.
+- **Observations**:
+  - **Impact of Data Point Intervals**: Higher intervals between data points showed higher power consumption due to increased working time during data reading.
 
-- Test 4 and Test 6 used.
-- The distance between data points show higher power consumption due to an increase of the working time.
-
-### Bigger vs smaller distance_between_set
-
-- Test 2 and Test 3 used.
-- The distance between showed consistently higher power due to less sleeping time.
-
-### Disable vs enable data_saver
-
-- Test 2, Test 9 and Test 11 used.
-- Enabling `DATA_SAVER` with low `DATA_PER_ITERATION` show a huge increase in power consumption due to a really slow saving process.
-- Enabling `DATA_SAVER` with high `DATA_PER_ITERATION` show a reasonable increase in consumption because saving process is a lot faster than with low `DATA_PER_ITERATION`.
-
-### Disable vs enable data_saver_keep_open
-
-- Test 2, Test 10 and Test 12 used.
-- Enabling `DATA_SAVER_KEEP_OPEN` with low `DATA_PER_ITERATION` give a reasonable increase in consumption (lower than `DATA_SAVER` with high `DATA_PER_ITERATION`) because the slower part in the process is the opening and closing of the file.
-- Enabling `DATA_SAVER` with high `DATA_PER_ITERATION` give a small improvement in power consumption compared to using low `DATA_PER_ITERATION`.
-
-### data_saver vs data_saver_keep_open
-
-- Test 9, Test 10, Test 11 and Test 12 used.
-- Given that the most time-consuming part is opening and closing the file, therefore, with the associated saving of the data present, opening and closing the file once is very advantageous. So using `DATA_SAVER_KEEP_OPEN` is much more power efficient than using `DATA_SAVER`.
-- The impact of increasing the size of `DATA_PER_ITERATION` is much greater in the case of `DATA_SAVER` than that of `DATA_SAVER_KEEP_OPEN`, since in `DATA_SAVER` the file is opened and closed every iteration.
+### Bigger vs Smaller Distance Between Sets
   
-### Disable vs enable send_dataSet
+- **Test Scenarios**: Test 2 and Test 3 were evaluated.
+- **Observations**:
+  - **Impact of Set Intervals**: Larger intervals between sets consistently showed lower power consumption, attributing this to increased sleeping times between data set processing.
 
-- Test 4 and Test 13 used
-- Enabling data transmission slightly increased power consumption, primarily influenced by the amount of data to be sent.
-
-### Disable vs enable send_dataSet_thread
-
-- Test 4 and Test 14 used
-- Enabling data transmission slightly increased power consumption, primarily influenced by the amount of data to be sent.
-
-### send_dataSet vs send_dataSet_thread
-
-- Test 13 and Test 14 used
-- No significant difference was detected in whether or not multiple threads were used, the only thing to note is that you are forced to use smaller `MAX_DATASET_DIMENSION`
-- In practical tests it is also seen that in the case of `SEND_DATASET_THREAD`, although the average consumption remains almost constant there are greater fluctuations
+### Disable vs Enable Data Saver
   
-### Disable vs enable data_sender
+- **Test Scenarios**: Test 2, Test 9, and Test 11 were considered.
+- **Observations**:
+  - **Effect of Data Per Iteration**: Enabling `DATA_SAVER` with varying `DATA_PER_ITERATION` values showcased significant power differences, particularly highlighting the impact of slower saving processes with lower `DATA_PER_ITERATION`, because the slower part in the saving process is file opening and file closing that happend evry iteration.
 
-- Test 2, Test 11, Test 13, Test 15 used
-- Enabling the data sender function led to higher power consumption than sending the data directly, presumably due to the additional processing required to write and read data.
+### Disable vs Enable Data Saver Keep Open
+  
+- **Test Scenarios**: Test 2, Test 10, and Test 12 were examined.
+- **Observations**:
+  - **Optimizing File Handling**: Enabling `DATA_SAVER_KEEP_OPEN` showcased improved power efficiency, especially with lower `DATA_PER_ITERATION`, emphasizing the advantage of reduced file opening and closing frequencies.
 
-### Bigger vs smaller data_to_scan
+### Data Saver vs Data Saver Keep Open
+  
+- **Test Scenarios**: Test 9, Test 10, Test 11, and Test 12 were scrutinized.
+- **Observations**:
+  - **File Operation Efficiency**: `DATA_SAVER_KEEP_OPEN` presented more power-efficient file handling compared to `DATA_SAVER`, especially noticeable with lower `DATA_PER_ITERATION`.
+  - **Impact of Different Data Per Iteration**: The impact of the size of `DATA_PER_ITERATION` is a lot less significant using `DATA_SAVER_KEEP_OPEN` than when using `DATA_SAVER`.
+  
+### Disable vs Enable Send DataSet
+  
+- **Test Scenarios**: Test 4 and Test 13 were analyzed.
+- **Observations**:
+  - **Impact of Data Transmission**: Enabling data transmission slightly increased power consumption, primarily influenced by the volume of data to be sent.
 
-- Test 15, Test 16 and Test 17 used
-- Scanning the file to attempt reading non-existent data leads to a low additional power consumption as it requires opening and closing the file for every `MAX_DATASET_DIMENSION` of scanned data.
-- Scanning the file to read and send more data give a reasonable amount of power consumption, in particulare we get about `data_to_scan*(12/max_dataSet_dimension + 10.04)ms` at 10.82mA
+### Disable vs Enable Send DataSet Thread
+  
+- **Test Scenarios**: Test 4 and Test 14 were reviewed.
+- **Observations**:
+  - **Marginal Power Impact**: Enabling data transmission via threads showcased a negligible difference in power consumption compared to not-thread transmission
 
-### Bigger vs smaller scan_time
+### Send DataSet vs Send DataSet Thread
+  
+- **Test Scenarios**: Test 13 and Test 14 were compared.
+- **Observations**:
+  - **Similar Power Usage**: The choice between sending data through threads or not showcased marginal power differences, with both methods exhibiting similar power consumption levels.
+  - **Difference in Max DataSet Dimension**: using `SEND_DATASET_THREAD` we are forced to reduce `MAX_DATASET_DIMENSION` a lot.
+  - **Notable Difference about the Practice Tests**: when using `SEND_DATASET_THREAD`, although the average consumption remains almost the same, there are greater fluctuations.
+  
+### Disable vs Enable Data Sender
+  
+- **Test Scenarios**: Test 2, Test 11, Test 13, and Test 15 were investigated.
+- **Observations**:
+  - **Added Processing Overhead**: Enabling data sender increased power consumption, likely due to the additional processing involved in writing and reading the data from the internal storage.
 
-- Test 15, Test 16 and Test 17 used
-- Scanning a file less frequent but reading and sending more data give a big improve instead of reading the file a lot of time to read and send small data, but we need to remeber that if this time, that is `data_to_scan*(12/max_dataSet_dimension + 10.04)ms` is more than the sleeping time we are loosing some data.
+### Bigger vs Smaller Data_to_Scan
+  
+- **Test Scenarios**: Test 15, Test 16, and Test 17 were examined.
+- **Observations**:
+  - **Impact of Scanning Data**: Scanning the file for non-existent or actual data showcased varying power consumption, with actual data transmission significantly affecting power usage.
+
+### Bigger vs Smaller Scan Time
+  
+- **Test Scenarios**: Test 15, Test 16, and Test 17 were used.
+- **Observations**:
+  - **Balancing Scan Frequency and Data Read**: Adjusting scan times demonstrated the trade-off between longer intervals and more data read, showcasing a notable impact on power efficiency.
+  - **Risk**: If the time to read and send all the data is bigger than the sleeping time we are likely to lose data.
   
