@@ -12,7 +12,7 @@ int BLECommunication::initialize(){
 
   if(!BLE.begin()) {
     debugPrint("Bluetooth initialization failed");
-    return 0;
+    return -1;
   }
 
   BLE.setLocalName("Senk");
@@ -23,7 +23,7 @@ int BLECommunication::initialize(){
   BLE.advertise();
   debugPrint("BLE configured");
 
-  return 1;
+  return 0;
 }
 
 int BLECommunication::send(short aX, short aY, short aZ, short gX, short gY, short gZ){
