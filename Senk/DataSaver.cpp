@@ -52,6 +52,7 @@ int DataSaver::saveDataKeepOpen(Data toSave[], int length, int dataPerIteration)
     debugPrint("Error opening the file for writing");
     return -1;
   }
+  
   for (int i = 0; i < length; i += dataPerIteration) {
     char Tbuffer[MAX_LINE_LENGTH * dataPerIteration];
     memset(Tbuffer, 0, sizeof(Tbuffer));
