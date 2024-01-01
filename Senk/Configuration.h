@@ -6,14 +6,14 @@
 
 
 // Debugging settings
-#define DEBUG_STATUS 1
+#define DEBUG_STATUS 0
 
 
 // Data configuration
 #define DATA_PER_SET 10000
 #define DATA_DISTANCE 1
 #define DISTANCE_BETWEEN_SET 0 
-#define MAX_DATASET_DIMENSION 150
+#define MAX_DATASET_DIMENSION 10
 
 // Data saving configuration
 #define DATA_SAVER 0
