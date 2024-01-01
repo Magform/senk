@@ -10,7 +10,7 @@ Access the project's source code and contribute on GitHub: [SENK GitHub Reposito
 
 ## Other useful links
 
-- [microcontroller datasheet](https://infocenter.nordicsemi.com/pdf/nRF52832_PS_v1.4.pdf)
-- [microcontroller consumption](https://devzone.nordicsemi.com/power/w/opp/2/online-power-profiler-for-bluetooth-le)
+- [Microcontroller datasheet](https://infocenter.nordicsemi.com/pdf/nRF52832_PS_v1.4.pdf)
+- [Microcontroller consumption](https://devzone.nordicsemi.com/power/w/opp/2/online-power-profiler-for-bluetooth-le)
 - [Arduino Nicla Sense ME datasheet](https://docs.arduino.cc/resources/datasheets/ABX00050-datasheet.pdf)
 - [Gyroscope and Accelerometer datasheet](https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bhi260ap-ds000.pdf)
