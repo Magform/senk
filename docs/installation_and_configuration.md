@@ -40,8 +40,8 @@ Follow these steps to set up and configure the **Senk** project on your device:
 
 ## Configuration
 
-The Senk project provides a range of configuration options, allowing you to customize its functionality based on your specific needs.\\
-To make adjustments, locate the `Configuration.h` file in the project's root directory. \\
+The Senk project provides a range of configuration options, allowing you to customize its functionality based on your specific needs.\
+To make adjustments, locate the `Configuration.h` file in the project's root directory. \
 Options:
 
 ### Debugging Settings
@@ -51,7 +51,7 @@ Options:
 
 ### Data Configuration
 
-Before configuring the data part, it's beneficial to understand how datasets function in Senk. \\
+Before configuring the data part, it's beneficial to understand how datasets function in Senk. \
 You can learn more about datasets [here](https://senk.nicolasferraresso.dev/#/implementation_analysis?id=dataset-management).
 
 - **DATA_PER_SET:**

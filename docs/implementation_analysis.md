@@ -24,33 +24,33 @@ To optimize energy consumption, the project strategically utilizes Bluetooth Low
 
 #### Configuration
 
-The system is designed to provide high modularity without sacrificing performance and energy efficiency. To achieve this, we utilize `#define` directives to configure various settings. When a configuration is turned off, all associated resources that would be utilized if it were activated are excluded and uninitialized.\\
+The system is designed to provide high modularity without sacrificing performance and energy efficiency. To achieve this, we utilize `#define` directives to configure various settings. When a configuration is turned off, all associated resources that would be utilized if it were activated are excluded and uninitialized.\
 This approach effectively saves energy and memory that would otherwise be unnecessarily wasted.
 
 #### DataSet Management
 
-To enhance modularity and save more energy, the system organizes data into datasets. Specifically, data is collected every `DISTANCE_BETWEEN_SET` seconds, with `DATA_PER_SET` data points captured at intervals of `DATA_DISTANCE` from each other.\\
+To enhance modularity and save more energy, the system organizes data into datasets. Specifically, data is collected every `DISTANCE_BETWEEN_SET` seconds, with `DATA_PER_SET` data points captured at intervals of `DATA_DISTANCE` from each other.\
 This dataset approach allows for high-frequency data acquisition without continuous sampling, resulting in significant battery savings.
 
 #### DataSet splitting
 
-Given our device's limited RAM capacity, it's necessary to segment the dataset into smaller parts, each with a maximum length of `MAX_DATASET_DIMENSION` more info [here](https://senk.nicolasferraresso.dev/#/installation_and_configuration?id=data-configuration). After processing each segment of the complete dataset, the data is dynamically managed: it can either be stored in local memory or transmitted using Bluetooth Low Energy (BLE), depending on the configuration settings.\\
-It's important to acknowledge that this segmentation process might cause a minor slowdown, particularly when saving data to local storage. Consider this while optimizing for swift data processing. \\
+Given our device's limited RAM capacity, it's necessary to segment the dataset into smaller parts, each with a maximum length of `MAX_DATASET_DIMENSION` more info [here](https://senk.nicolasferraresso.dev/#/installation_and_configuration?id=data-configuration). After processing each segment of the complete dataset, the data is dynamically managed: it can either be stored in local memory or transmitted using Bluetooth Low Energy (BLE), depending on the configuration settings.\
+It's important to acknowledge that this segmentation process might cause a minor slowdown, particularly when saving data to local storage. Consider this while optimizing for swift data processing. \
 To optimize this process, we have introduced an option in the application to enable data transmission via BLE between one dataset part and another in a different thread. This ensures that the distance between various data remains unchanged. However, it's important to note that enabling this may result in a slight increase in energy consumption
 
 #### BLE Data Acquisition
 
 Data is shared via BLE, specifically through the creation of a `DataSend` service with a UUID specified in the configuration file. Within this service, two characteristics, namely `Accelerometer` and `Gyroscope`, are established. Both characteristics have UUIDs that can be configured through the settings file (for more information, refer to [here](https://senk.nicolasferraresso.dev/#/installation_and_configuration?id=data-transmission-configuration)).
 
-Both characteristics transmit an array of short values representing XYZ data. It is important to note that the data is transmitted in little-endian format.\\
-For example, if our gyroscope sends something like 0xFFFF0F000200, the corresponding axes values are X: -1, Y: 15, Z: 2.\\
-If needed, a conversion script is available [here](https://github.com/Magform/senk/tree/main/util/conversion) to translate the transmitted data into axis values.\\
+Both characteristics transmit an array of short values representing XYZ data. It is important to note that the data is transmitted in little-endian format.\
+For example, if our gyroscope sends something like 0xFFFF0F000200, the corresponding axes values are X: -1, Y: 15, Z: 2.\
+If needed, a conversion script is available [here](https://github.com/Magform/senk/tree/main/util/conversion) to translate the transmitted data into axis values.\
 
 ### Class overview
 
 #### Senk [main]
 
-This is the main sketch, it manages sensor data acquisition with a focus on modularity and energy efficiency.\\
+This is the main sketch, it manages sensor data acquisition with a focus on modularity and energy efficiency.\
 Here's a brief overview of its key components and functionalities:
 
 1. **Sensor Handling:**
@@ -66,7 +66,7 @@ Here's a brief overview of its key components and functionalities:
 
 #### Data
 
-The `Data` class encapsulates the representation and manipulation of sensor data, providing methods to convert, retrieve, and present information. \\
+The `Data` class encapsulates the representation and manipulation of sensor data, providing methods to convert, retrieve, and present information. \
 Here's a concise overview of the class:
 
 1. **Constructors:**
@@ -82,7 +82,7 @@ Here's a concise overview of the class:
 
 #### DataSaver
 
-The `DataSaver` class is responsible for managing the storage and retrieval of sensor data, providing functionality to save data to local storage, format storage, print file contents, and retrieve specific data sets.\\
+The `DataSaver` class is responsible for managing the storage and retrieval of sensor data, providing functionality to save data to local storage, format storage, print file contents, and retrieve specific data sets.\
 Below is a concise overview of the class:
 
 1. **Constructors and Destructor:**
